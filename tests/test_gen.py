@@ -1,4 +1,4 @@
-from dev.gen import generate, generate_id, generate_password
+from libdev.gen import generate, generate_id, generate_password
 
 
 def test_generate():

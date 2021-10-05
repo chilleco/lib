@@ -1,4 +1,4 @@
-from dev.codes import get_network, get_language
+from libdev.codes import get_network, get_language
 
 
 def test_get_network():

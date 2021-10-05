@@ -1,4 +1,4 @@
-from dev.time import get_date
+from libdev.time import get_date
 
 
 def test_get_date():
