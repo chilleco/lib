@@ -2,6 +2,9 @@
 Database ciphers
 """
 
+from .cfg import cfg
+
+
 # NOTE: ISO 639-1
 LOCALES = (
     'en',
@@ -32,6 +35,9 @@ USER_STATUSES = (
 )
 
 
+default_locale = cfg('locale', 0)
+
+
 def get_network(code):
     """ Get network code by cipher """
 
@@ -50,7 +56,7 @@ def get_language(code):
     """ Get language code by cipher """
 
     if code is None:
-        return None
+        return default_locale
 
     if code in LOCALES:
         return LOCALES.index(code)
@@ -58,4 +64,4 @@ def get_language(code):
     if code in range(len(LOCALES)):
         return code
 
-    return None
+    return default_locale
