@@ -35,10 +35,13 @@ USER_STATUSES = (
 def get_network(code):
     """ Get network code by cipher """
 
+    if code is None:
+        return 0
+
     if code in NETWORKS:
         return NETWORKS.index(code)
 
-    if 0 <= code < len(NETWORKS):
+    if code in range(len(LOCALES)):
         return code
 
     return 0

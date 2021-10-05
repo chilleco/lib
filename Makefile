@@ -31,6 +31,17 @@ test-linter:
 		--rcfile=tests/.pylintrc \
 		--msg-template='{path}:{line}:{column}: [{symbol}] {msg}'
 
+test-unit-all:
+	$(PYTHON) -m pytest -s tests/
+
+test-unit:
+	git status -s \
+	| grep 'tests/.*\.py$$' \
+	| awk '{print $$1,$$2}' \
+	| grep -i '^[ma]' \
+	| awk '{print $$2}' \
+	| xargs $(PYTHON) -m pytest -s
+
 release:
 	$(PYTHON) setup.py sdist bdist_wheel
 	sudo $(PYTHON) -m twine upload dist/*

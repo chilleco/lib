@@ -4,7 +4,6 @@ Codes generation functionality
 
 import string
 import random
-import math
 
 
 SYMBOLS = string.digits + string.ascii_letters
@@ -29,7 +28,9 @@ def generate_password(length: int = 8) -> str:
         random.choice(string.digits) for _ in range(length//3)
     )
     letters = ''.join(
-        random.choice(string.ascii_letters) for _ in range(math.ceil(length/3))
+        random.choice(string.ascii_letters) for _ in range(
+            length - 2 * (length//3)
+        )
     )
 
     data = list(spec_symbols + digits + letters)
