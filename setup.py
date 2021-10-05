@@ -42,7 +42,10 @@ setup(
         'Programming Language :: Python :: 3',
         'Operating System :: OS Independent',
     ],
-    keywords='standard, lib, dev, development, generate, codes, tokens, ids, passwords, generator, ciphers, time',
+    keywords=(
+        'standard, lib, dev, development, cfg, config, generate, codes, '
+        'tokens, ids, passwords, generator, ciphers, time'
+    ),
     packages=find_packages(exclude=('tests',)),
     python_requires='>=3.7, <4',
     project_urls={
