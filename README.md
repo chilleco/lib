@@ -8,5 +8,6 @@ Submodule | Description
 ` libdev.time ` | Time processing
 ` libdev.gen ` | Code & token generators
 ` libdev.codes ` | Database ciphers
+` libdev.check ` | Checking functions
 
 [PyPI](https://pypi.org/project/libdev/)
