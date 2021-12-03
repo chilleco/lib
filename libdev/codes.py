@@ -12,6 +12,12 @@ LOCALES = (
     'es',
 )
 
+FLAGS = (
+    '🇬🇧',
+    '🇷🇺',
+    '🇪🇸',
+)
+
 NETWORKS = (
     '', # Console
     'web', # Web-interface
@@ -65,3 +71,7 @@ def get_language(code):
         return code
 
     return default_locale
+
+def get_flag(code):
+    """ Get flag by language """
+    return FLAGS[get_language(code)]
