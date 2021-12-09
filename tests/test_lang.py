@@ -1,4 +1,4 @@
-from libdev.lang import get_form
+from libdev.lang import get_form, format_time
 
 
 def test_form():
@@ -20,3 +20,20 @@ def test_form():
     assert get_form(-1012, ('минута', 'минуты', 'минут')) == 'минут'
     assert get_form(-25, ('минута', 'минуты', 'минут')) == 'минут'
     assert get_form(-12, ('минута', 'минуты', 'минут')) == 'минут'
+
+def test_format_time():
+    assert format_time(0) == '0 минут'
+    assert format_time(30) == '0 минут'
+    assert format_time(31) == '1 минута'
+    assert format_time(59) == '1 минута'
+    assert format_time(60) == '1 минута'
+    assert format_time(10799) == '180 минут'
+    assert format_time(10800) == '3 часа'
+    assert format_time(12345) == '3 часа'
+    assert format_time(259200) == '3 дня'
+    assert format_time(259201) == '3 дня'
+    assert format_time(1036800) == '12 дней'
+    assert format_time(8726400) == '101 день'
+    assert format_time(-1) == '0 минут'
+    assert format_time(-85) == '-1 минута'
+    assert format_time(-432000) == '-5 дней'
