@@ -16,7 +16,9 @@ def generate(length: int = 32) -> str:
 
 def generate_id(length: int = 8) -> int:
     """ ID generation """
-    return int(''.join(random.choice(string.digits) for _ in range(length)))
+    number = ''.join(random.choice(string.digits) for _ in range(length-1))
+    number = random.choice(string.digits[1:]) + number
+    return int(number)
 
 def generate_password(length: int = 8) -> str:
     """ Password generation """
