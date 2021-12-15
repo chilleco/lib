@@ -17,6 +17,7 @@ __pycache__/
 
 # Keys & sets
 keys*
+sets*
 .env*
 
 # Data

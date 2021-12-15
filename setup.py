@@ -44,10 +44,14 @@ setup(
     ],
     keywords=(
         'standard, lib, dev, development, cfg, config, generate, codes, '
-        'tokens, ids, passwords, generator, ciphers, time'
+        'tokens, ids, passwords, generator, ciphers, time, formatter, nlp, '
+        'natural language, aws, s3, upload file, file server'
     ),
     packages=find_packages(exclude=('tests',)),
     python_requires='>=3.7, <4',
+    install_requires=[
+        'boto3==1.20.24',
+    ],
     project_urls={
         'Source': 'https://github.com/kosyachniy/lib',
     },

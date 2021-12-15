@@ -2,9 +2,10 @@ PYTHON := env/bin/python
 
 setup:
 	python3 -m venv env
+	$(PYTHON) -m pip install -r requirements.txt
 
 setup-tests:
-	python3 -m venv env
+	make setup
 	$(PYTHON) -m pip install -r tests/requirements.txt
 
 setup-release:
@@ -55,3 +56,10 @@ clean:
 	rm -rf build/
 	rm -rf dist/
 	rm -rf *.egg-info/
+
+clear:
+	rm -rf env/
+	rm -rf __pycache__/
+	rm -rf **/__pycache__/
+	rm -rf .pytest_cache/
+	rm -rf **/.pytest_cache/

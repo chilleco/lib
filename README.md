@@ -1,5 +1,8 @@
-# Dev lib [Libdev]
-Set of standard functions for development
+# LibDev
+Development library — Set of standard functions for development
+
+[GitHub](https://github.com/kosyachniy/lib)
+ | [PyPI](https://pypi.org/project/libdev/)
 
 ## Submodules
 Submodule | Description
@@ -8,6 +11,6 @@ Submodule | Description
 ` libdev.time ` | Time processing
 ` libdev.gen ` | Code & token generators
 ` libdev.codes ` | Database ciphers
+` libdev.lang ` | Natural language formatters
 ` libdev.check ` | Checking functions
-
-[PyPI](https://pypi.org/project/libdev/)
+` libdev.aws ` | AWS S3 file server functions

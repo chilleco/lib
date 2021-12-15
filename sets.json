@@ -1,1 +1,18 @@
-{"key": "value", "olo": {"ulu": 123}, "ola": {"foo": {"bar": true}}}
+{
+    "key": "value",
+    "olo": {
+        "ulu": 123
+    },
+    "ola": {
+        "foo": {
+            "bar": true
+        }
+    },
+    "amazon": {
+        "key": "<ACCESS KEY ID>",
+        "secret": "<ACCESS SECRET KEY>",
+        "bucket": "<BUCKET>",
+        "directory": "test",
+        "region": "eu-central-1"
+    }
+}
