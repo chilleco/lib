@@ -4,6 +4,7 @@ Functionality of Amazon Web Services
 
 import boto3
 from botocore.exceptions import ClientError
+
 from .cfg import cfg
 from .gen import generate
 
@@ -27,13 +28,22 @@ def upload_file(
     file,
     bucket=cfg('amazon.bucket'),
     directory=cfg('amazon.directory'),
+    file_type=None,
 ):
     """ Upload file """
 
-    file_type = file.split('.')[-1]
+    if not file_type and isinstance(file, str) and '.' in file:
+        file_type = file.split('.')[-1]
+    file_type = file_type.lower() if file_type else ''
+
     name = f"{directory}/{generate()}.{file_type}"
 
-    s3client.upload_file(
+    if isinstance(file, str):
+        handler = s3client.upload_file
+    else:
+        handler = s3client.upload_fileobj
+
+    handler(
         file, bucket, name,
         ExtraArgs={'ACL': 'public-read'},
     )
