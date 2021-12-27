@@ -7,6 +7,8 @@ import datetime
 # import pytz
 import re
 
+from .lang import get_form
+
 
 MONTHS = {
     '01': ('январь', 'января', 'янв'),
@@ -86,3 +88,42 @@ def parse_time(data, tz=0):
     )
 
     return int(data.timestamp())
+
+def format_delta(sec, short=False):
+    """ Format time delta in words by seconds """
+
+    if abs(sec) >= 259200: # 3 days
+        time_def = round(sec / (24 * 60 * 60))
+        if short:
+            delta = f"{time_def} д"
+        else:
+            delta = f"{time_def} {get_form(time_def, ('день', 'дня', 'дней'))}"
+
+    elif abs(sec) >= 10800: # 3 hours
+        time_def = round(sec / (60 * 60))
+        if short:
+            delta = f"{time_def} ч"
+        else:
+            delta = f"{time_def} {get_form(time_def, ('час', 'часа', 'часов'))}"
+
+    elif abs(sec) > 180: # 3 min
+        time_def = round(sec / 60)
+        if short:
+            delta = f"{time_def} мин"
+        else:
+            delta = (
+                f"{time_def}"
+                f" {get_form(time_def, ('минута', 'минуты', 'минут'))}"
+            )
+
+    else:
+        time_def = int(sec)
+        if short:
+            delta = f"{time_def} сек"
+        else:
+            delta = (
+                f"{time_def}"
+                f" {get_form(time_def, ('секунда', 'секунды', 'секунд'))}"
+            )
+
+    return delta
