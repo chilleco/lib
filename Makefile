@@ -59,6 +59,7 @@ clean:
 
 clear:
 	rm -rf env/
+	rm -rf **/env/
 	rm -rf __pycache__/
 	rm -rf **/__pycache__/
 	rm -rf .pytest_cache/

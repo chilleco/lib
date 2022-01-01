@@ -2,12 +2,17 @@
 https://www.epochconverter.com/
 """
 
-from libdev.time import get_date, parse_time, format_delta
+from libdev.time import get_time, get_date, parse_time, format_delta
 
 
 def test_get_date():
     assert get_date(1633427647.018819) == '20211005'
     assert get_date(1633427647.018819, '%d.%m.%Y %H:%M:%S') == '05.10.2021 12:54:07'
+
+def test_get_time():
+    assert get_time(1641061152.467365) == '01.01.2022 18:19:12'
+    assert get_time(1641061152, tz=3) == '01.01.2022 21:19:12'
+    assert get_time(1641061152, template='%Y%m%d%H%M%S', tz=3) == '20220101211912'
 
 def test_parse_time():
     assert parse_time('7.10.1998 7:00:00') == 907743600

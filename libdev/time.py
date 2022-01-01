@@ -37,9 +37,13 @@ DAYS_OF_WEEK = (
 
 def get_date(text, template='%Y%m%d'):
     """ Get date from timestamp """
-    # TODO: get_date -> get_time
-    # TODO: change template
+    # TODO: del get_date
     return time.strftime(template, time.localtime(text))
+
+def get_time(data=time.time(), template='%d.%m.%Y %H:%M:%S', tz=0):
+    """ Get time from timestamp """
+    # TODO: smart TZ
+    return time.strftime(template, time.gmtime(data + tz * 3600))
 
 def parse_time(data, tz=0):
     """ Parse time """
