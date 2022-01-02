@@ -2,12 +2,8 @@
 https://www.epochconverter.com/
 """
 
-from libdev.time import get_time, get_date, parse_time, format_delta
+from libdev.time import get_time, parse_time, format_delta
 
-
-def test_get_date():
-    assert get_date(1633427647.018819) == '20211005'
-    assert get_date(1633427647.018819, '%d.%m.%Y %H:%M:%S') == '05.10.2021 12:54:07'
 
 def test_get_time():
     assert get_time(1641061152.467365) == '01.01.2022 18:19:12'
@@ -16,9 +12,20 @@ def test_get_time():
 
 def test_parse_time():
     assert parse_time('7.10.1998 7:00:00') == 907743600
+    # custom timezone
     assert parse_time('7 октября 1998 года 12:00:00', tz=5) == 907743600
+    # extra symbols
     assert parse_time('🕒 пн, 20 дек. 2021 г., 00:32:44 MSK') == 1639949564
-    assert parse_time('1 сент 2021 года 00:00:00') == 1630454400 # r'сен' + сент → 09.т
+    # case: r'сен' + сент → 09.т
+    assert parse_time('1 сент 2021 года 00:00:00') == 1630454400
+    # min symbols
+    assert parse_time('010119700:0:0') == 0
+    assert parse_time('1мая19700:0:0') == 10368000
+
+def test_parse_wrong_time():
+    assert parse_time('') == None
+    assert parse_time('1') == None
+    assert parse_time('0101197000000') == None
 
 def test_format_delta():
     assert format_delta(0) == '0 секунд'
