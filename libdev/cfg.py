@@ -2,15 +2,27 @@
 Functionality of getting configuration
 """
 
+import os
 import json
 
+from dotenv import load_dotenv
 
-with open('sets.json', 'r', encoding='utf-8') as file:
-    sets = json.loads(file.read())
+
+if os.path.isfile('sets.json'):
+    with open('sets.json', 'r', encoding='utf-8') as file:
+        sets = json.loads(file.read())
+else:
+    sets = {}
+
+if os.path.isfile('.env'):
+    load_dotenv()
 
 
 def cfg(name, default=None):
     """ Get config value by key """
+
+    if not sets or name.isupper():
+        return os.getenv(name, default)
 
     keys = name.split('.')
     data = sets

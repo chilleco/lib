@@ -1,7 +1,7 @@
 from libdev.cfg import cfg
 
 
-def test_cfg():
+def test_cfg_json():
     assert cfg('key') == 'value'
     assert cfg('test') is None
     assert cfg('olo.ulu') == 123
@@ -11,3 +11,9 @@ def test_cfg():
     assert cfg('ola.foa') is None
     assert cfg('ola.foo.bor') is None
     assert cfg('olx', 'test') == 'test'
+
+def test_cfg_environ():
+    assert cfg('TEST') == 'test'
+    assert cfg('TEST_TEST', 'value') == 'test_test'
+    assert cfg('VALUE', 'value') == 'value'
+    assert cfg('KEY') == None
