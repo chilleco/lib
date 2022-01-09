@@ -21,6 +21,8 @@ def test_parse_time():
     # min symbols
     assert parse_time('010119700:0:0') == 0
     assert parse_time('1мая19700:0:0') == 10368000
+    # before time started
+    assert parse_time('1мая10000:0:0') == -30599856000
 
 def test_parse_wrong_time():
     assert parse_time('') == None
@@ -48,9 +50,9 @@ def test_format_delta():
     assert format_delta(-432000) == '-5 дней'
 
 def test_format_delta_short():
-    assert format_delta(0, short=True) == '0 сек'
-    assert format_delta(1, short=True) == '1 сек'
-    assert format_delta(180, short=True) == '180 сек'
-    assert format_delta(181, short=True) == '3 мин'
-    assert format_delta(18000, short=True) == '5 ч'
-    assert format_delta(1814400, short=True) == '21 д'
+    assert format_delta(0, short=True) == '0сек'
+    assert format_delta(1, short=True) == '1сек'
+    assert format_delta(180, short=True) == '180сек'
+    assert format_delta(181, short=True) == '3мин'
+    assert format_delta(18000, short=True) == '5ч'
+    assert format_delta(1814400, short=True) == '21д'

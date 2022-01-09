@@ -101,21 +101,21 @@ def format_delta(sec, short=False):
     if abs(sec) >= 259200: # 3 days
         time_def = round(sec / (24 * 60 * 60))
         if short:
-            delta = f"{time_def} д"
+            delta = f"{time_def}д"
         else:
             delta = f"{time_def} {get_form(time_def, ('день', 'дня', 'дней'))}"
 
     elif abs(sec) >= 10800: # 3 hours
         time_def = round(sec / (60 * 60))
         if short:
-            delta = f"{time_def} ч"
+            delta = f"{time_def}ч"
         else:
             delta = f"{time_def} {get_form(time_def, ('час', 'часа', 'часов'))}"
 
     elif abs(sec) > 180: # 3 min
         time_def = round(sec / 60)
         if short:
-            delta = f"{time_def} мин"
+            delta = f"{time_def}мин"
         else:
             delta = (
                 f"{time_def}"
@@ -125,7 +125,7 @@ def format_delta(sec, short=False):
     else:
         time_def = int(sec)
         if short:
-            delta = f"{time_def} сек"
+            delta = f"{time_def}сек"
         else:
             delta = (
                 f"{time_def}"
