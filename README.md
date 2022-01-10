@@ -9,8 +9,8 @@ Submodule | Description
 ---|----
 ` libdev.cfg ` | Configuration getting
 ` libdev.time ` | Time processing
+` libdev.lang ` | Natural language formatters
 ` libdev.gen ` | Code & token generators
 ` libdev.codes ` | Database ciphers
-` libdev.lang ` | Natural language formatters
 ` libdev.check ` | Checking functions
 ` libdev.aws ` | AWS S3 file server functions

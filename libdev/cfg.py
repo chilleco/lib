@@ -22,6 +22,7 @@ def cfg(name, default=None):
     """ Get config value by key """
 
     if not sets or name.isupper():
+        name = name.replace('.', '_').upper()
         return os.getenv(name, default)
 
     keys = name.split('.')
