@@ -23,7 +23,15 @@ def cfg(name, default=None):
 
     if not sets or name.isupper():
         name = name.replace('.', '_').upper()
-        return os.getenv(name, default)
+        value = os.getenv(name, default)
+
+        if value and value.replace('.', '').isdigit():
+            if '.' in value:
+                value = float(value)
+            else:
+                value = int(value)
+
+        return value
 
     keys = name.split('.')
     data = sets
