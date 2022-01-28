@@ -25,11 +25,11 @@ def cfg(name, default=None):
         name = name.replace('.', '_').upper()
         value = os.getenv(name, default)
 
-        if value and value.replace('.', '').isdigit():
-            if '.' in value:
-                value = float(value)
-            else:
-                value = int(value)
+        if value:
+            try:
+                value = json.loads(value)
+            except (json.decoder.JSONDecodeError, TypeError):
+                pass
 
         return value
 

@@ -17,4 +17,7 @@ def test_cfg_environ():
     assert cfg('TEST_TEST', 'value') == 'test_test'
     assert cfg('VALUE', 'value') == 'value'
     assert cfg('DIGIT') == 123
+    assert isinstance(cfg('FLOAT'), float)
+    assert cfg('BOOL') == False
+    assert cfg('LIST') == [{'foo': 'bar'}]
     assert cfg('KEY') == None
