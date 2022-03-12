@@ -27,7 +27,7 @@ s3client = s3.meta.client
 def upload_file(
     file,
     bucket=cfg('amazon.bucket'),
-    directory=cfg('amazon.directory'),
+    directory=cfg('mode').lower(),
     file_type=None,
 ):
     """ Upload file """

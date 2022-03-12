@@ -12,7 +12,7 @@
         "key": "<ACCESS KEY ID>",
         "secret": "<ACCESS SECRET KEY>",
         "bucket": "<BUCKET>",
-        "directory": "test",
         "region": "eu-central-1"
-    }
+    },
+    "mode": "test"
 }

@@ -9,3 +9,5 @@ def test_upload_file():
 
     with open(FILE, 'rb') as file:
         assert upload_file(file, file_type='Py')[-3:] == '.py'
+
+    # TODO: upload_file('https://s1.1zoom.ru/big0/621/359909-svetik.jpg')
