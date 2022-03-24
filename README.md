@@ -11,6 +11,6 @@ Submodule | Description
 ` libdev.time ` | Time processing
 ` libdev.lang ` | Natural language formatters
 ` libdev.gen ` | Code & token generators
-` libdev.codes ` | Database ciphers
+` libdev.codes ` | Ciphers: langs & flags / networks / user statuses
 ` libdev.check ` | Checking functions
 ` libdev.aws ` | AWS S3 file server functions

@@ -1,5 +1,15 @@
-from libdev.check import fake_phone, fake_login
+from libdev.check import is_float, fake_phone, fake_login
 
+
+def test_float():
+    assert is_float('0') == True
+    assert is_float('.1') == True
+    assert is_float('-.2') == True
+    assert is_float('-3.') == True
+    assert is_float('4.0') == True
+    assert is_float('-5.678') == True
+    assert is_float('6.7x') == False
+    assert is_float('-7..8') == False
 
 def test_phone():
     assert fake_phone(79000000001) == True

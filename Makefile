@@ -12,6 +12,10 @@ setup-release:
 	python3 -m venv env
 	$(PYTHON) -m pip install -r requirements.dev.txt
 
+setup-all:
+	make setup-tests
+	make setup-release
+
 test-linter-all:
 	find . -type f -name '*.py' \
 	| grep -vE 'env/' \

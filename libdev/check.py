@@ -2,6 +2,15 @@
 Checking functionality
 """
 
+def is_float(value: str) -> bool:
+    """ Check string for float """
+
+    try:
+        float(value)
+    except ValueError:
+        return False
+
+    return True
 
 def fake_phone(value: str) -> bool:
     """ Check a phone for a test format """

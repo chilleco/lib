@@ -51,7 +51,7 @@ setup(
     python_requires='>=3.7, <4',
     install_requires=[
         'python-dotenv==0.19.2',
-        'boto3==1.21.17',
+        'boto3==1.21.25',
     ],
     project_urls={
         'Source': 'https://github.com/kosyachniy/lib',
