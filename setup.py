@@ -50,8 +50,8 @@ setup(
     packages=find_packages(exclude=('tests',)),
     python_requires='>=3.7, <4',
     install_requires=[
-        'python-dotenv==0.19.2',
-        'boto3==1.21.25',
+        'python-dotenv==0.20.0',
+        'boto3==1.21.37',
     ],
     project_urls={
         'Source': 'https://github.com/kosyachniy/lib',

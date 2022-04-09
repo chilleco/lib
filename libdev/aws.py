@@ -18,7 +18,7 @@ LINK = (
 s3 = boto3.resource(
     's3',
     region_name=cfg('amazon.region'),
-    aws_access_key_id=cfg('amazon.key'),
+    aws_access_key_id=cfg('amazon.id'),
     aws_secret_access_key=cfg('amazon.secret'),
 )
 s3client = s3.meta.client
