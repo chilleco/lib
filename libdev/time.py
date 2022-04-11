@@ -2,6 +2,8 @@
 Time functionality
 """
 
+# TODO: Учитывать летнее / зимнее время в прошлых датах, которого теперь нет
+
 import time
 import datetime
 # import pytz
@@ -40,6 +42,7 @@ def get_time(data=time.time(), template='%d.%m.%Y %H:%M:%S', tz=0):
     # TODO: smart TZ
     return time.strftime(template, time.gmtime(data + tz * 3600))
 
+# pylint: disable=too-many-branches
 def parse_time(data: str, tz=0):
     """ Parse time """
 
@@ -83,6 +86,12 @@ def parse_time(data: str, tz=0):
     else:
         tz_delta = tz
         # tz = pytz.utc
+
+    colon_count = data.count(':')
+    if colon_count == 0 or colon_count > 2:
+        return None
+    if colon_count == 1:
+        data += ':00'
 
     try:
         data = datetime.datetime.strptime(data, '%d.%m.%Y %H:%M:%S')
