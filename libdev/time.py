@@ -39,7 +39,12 @@ DAYS_OF_WEEK = (
 
 def get_time(data=time.time(), template='%d.%m.%Y %H:%M:%S', tz=0):
     """ Get time from timestamp """
+
     # TODO: smart TZ
+
+    if isinstance(data, datetime.datetime):
+        data = data.timestamp()
+
     return time.strftime(template, time.gmtime(data + tz * 3600))
 
 # pylint: disable=too-many-branches

@@ -2,6 +2,8 @@
 https://www.epochconverter.com/
 """
 
+import datetime
+
 from libdev.time import get_time, parse_time, format_delta
 
 
@@ -9,6 +11,12 @@ def test_get_time():
     assert get_time(1641061152.467365) == '01.01.2022 18:19:12'
     assert get_time(1641061152, tz=3) == '01.01.2022 21:19:12'
     assert get_time(1641061152, template='%Y%m%d%H%M%S', tz=3) == '20220101211912'
+
+    tz = datetime.timezone(datetime.timedelta(hours=0), name='UTC')
+    assert get_time(
+        datetime.datetime(year=2018, month=7, day=16, tzinfo=tz),
+        template='%d.%m.%Y',
+    ) == '16.07.2018'
 
 def test_parse_time():
     assert parse_time('7.10.1998 7:00:00') == 907743600
