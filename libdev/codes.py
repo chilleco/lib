@@ -28,11 +28,17 @@ NETWORKS = (
     'a', # Apple
 )
 
+STATUSES = (
+    'removed',
+    'disabled',
+    'active',
+)
+
 USER_STATUSES = (
-    'deleted', # not specified # Does not exist
+    'removed', # deleted # not specified # Does not exist
     'blocked', # archive # Does not have access to resources
-    'normal', # guest
-    'registered', # confirmed # Save personal data & progress
+    'guest', # normal
+    'authorized', # registered # confirmed # Save personal data & progress
     'editor', # curator # View reviews
     'verified', # Delete reviews
     'moderator', # Block users
