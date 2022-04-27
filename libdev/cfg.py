@@ -21,7 +21,8 @@ if os.path.isfile('.env'):
 def cfg(name, default=None):
     """ Get config value by key """
 
-    if not sets or name.isupper():
+    # NOTE: upper → not to mix when we need it in such a register and it is not
+    if name not in sets and name.isupper():
         name = name.replace('.', '_').upper()
         value = os.getenv(name, default)
 
@@ -43,3 +44,7 @@ def cfg(name, default=None):
         data = data[key]
 
     return data
+
+def set_cfg(name, value):
+    """ Set config value """
+    sets[name] = value

@@ -1,4 +1,4 @@
-from libdev.cfg import cfg
+from libdev.cfg import cfg, set_cfg
 
 
 def test_cfg_json():
@@ -21,3 +21,8 @@ def test_cfg_environ():
     assert cfg('BOOL') == False
     assert cfg('LIST') == [{'foo': 'bar'}]
     assert cfg('KEY') == None
+
+def test_set_cfg():
+    assert cfg('NEW') is None
+    set_cfg('NEW', 'value')
+    assert cfg('NEW') == 'value'
