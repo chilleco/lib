@@ -21,29 +21,27 @@ if os.path.isfile('.env'):
 def cfg(name, default=None):
     """ Get config value by key """
 
-    # NOTE: upper → not to mix when we need it in such a register and it is not
-    if name not in sets and name.isupper():
-        name = name.replace('.', '_').upper()
-        value = os.getenv(name, default)
-
-        if value:
-            try:
-                value = json.loads(value)
-            except (json.decoder.JSONDecodeError, TypeError):
-                pass
-
-        return value
-
     keys = name.split('.')
     data = sets
 
     for key in keys:
         if key not in data:
-            return default
-
+            break
         data = data[key]
+    else:
+        return data
 
-    return data
+    name = name.replace('.', '_').upper()
+    value = os.getenv(name, default)
+
+    if value:
+        try:
+            value = json.loads(value)
+        except (json.decoder.JSONDecodeError, TypeError):
+            pass
+
+    return value
+
 
 def set_cfg(name, value):
     """ Set config value """

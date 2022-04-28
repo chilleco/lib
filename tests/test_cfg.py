@@ -3,7 +3,7 @@ from libdev.cfg import cfg, set_cfg
 
 def test_cfg_json():
     assert cfg('key') == 'value'
-    assert cfg('test') is None
+    assert cfg('test') == 'test'
     assert cfg('olo.ulu') == 123
     assert cfg('olo') == {'ulu': 123}
     assert cfg('ola.foo.bar') == True
