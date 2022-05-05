@@ -26,3 +26,8 @@ def test_set_cfg():
     assert cfg('NEW') is None
     set_cfg('NEW', 'value')
     assert cfg('NEW') == 'value'
+    
+def test_set_cfg_nested():
+    assert cfg('ulu.olo') is None
+    set_cfg('ulu.olo', 'value')
+    assert cfg('ulu') == {'olo': 'value'}
