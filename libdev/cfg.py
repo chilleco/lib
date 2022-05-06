@@ -45,4 +45,19 @@ def cfg(name, default=None):
 
 def set_cfg(name, value):
     """ Set config value """
-    sets[name] = value
+    array_name = name.split(".")
+    dictionary = {}
+    tmp_dict = {}
+    if len(array_name) == 1:
+        sets[name] = value
+        return
+    else:
+        index = len(array_name) - 1
+        dictionary[array_name[index]] = value
+        index -= 1 
+        while index > 0:
+            tmp_dict[array_name[index]] = dictionary
+            dictionary = tmp_dict
+            tmp_dict = {}
+            index -= 1        
+    sets[array_name[0]] = dictionary
