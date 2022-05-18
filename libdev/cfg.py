@@ -56,8 +56,15 @@ def set_cfg(name, value):
         dictionary[array_name[index]] = value
         index -= 1 
         while index > 0:
-            tmp_dict[array_name[index]] = dictionary
+            if array_name[index] in sets:
+                tmp_dict[array_name[index]].append(dictionary)
+            else:
+                tmp_dict[array_name[index]] = dictionary
             dictionary = tmp_dict
             tmp_dict = {}
-            index -= 1        
-    sets[array_name[0]] = dictionary
+            index -= 1
+    if array_name[0] not in sets: 
+        sets[array_name[0]] = dictionary
+    else:
+        sets[array_name[0]].update(dictionary)
+    print(sets)
