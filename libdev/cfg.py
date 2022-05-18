@@ -67,4 +67,3 @@ def set_cfg(name, value):
         sets[array_name[0]] = dictionary
     else:
         sets[array_name[0]].update(dictionary)
-    print(sets)
