@@ -1,4 +1,4 @@
-from libdev.lang import get_form
+from libdev.lang import get_form, transliterate
 
 
 def test_form():
@@ -20,3 +20,8 @@ def test_form():
     assert get_form(-1012, ('минута', 'минуты', 'минут')) == 'минут'
     assert get_form(-25, ('минута', 'минуты', 'минут')) == 'минут'
     assert get_form(-12, ('минута', 'минуты', 'минут')) == 'минут'
+
+def test_transliterate():
+    assert transliterate('Щелкунчик') == 'shchelkunchik'
+    assert transliterate(' \tьяНКъы\n') == 'yanky'
+    assert transliterate('одежда') == 'odezhda'

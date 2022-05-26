@@ -2,7 +2,7 @@
 Initializing the Python package
 """
 
-__version__ = '0.28'
+__version__ = '0.30'
 
 __all__ = (
     '__version__',
