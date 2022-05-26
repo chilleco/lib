@@ -2,6 +2,9 @@
 Natural language processing functionality
 """
 
+import re
+
+
 TRANSLITERATION = {
     'а': 'a',
     'б': 'b',
@@ -52,10 +55,16 @@ def get_form(count, variations):
 
     return variations[2]
 
-def transliterate(data):
+def transliterate(data, separator=' '):
     """ Transliterate RU → EN """
 
     if data is None:
         return ''
 
-    return ''.join(TRANSLITERATION[i] for i in data.strip().lower())
+    data = ''.join(
+        TRANSLITERATION.get(i, separator)
+        for i in data.strip().lower()
+    )
+    data = re.sub(rf'{separator}{{2,}}', separator, data)
+
+    return data

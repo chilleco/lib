@@ -25,3 +25,5 @@ def test_transliterate():
     assert transliterate('Щелкунчик') == 'shchelkunchik'
     assert transliterate(' \tьяНКъы\n') == 'yanky'
     assert transliterate('одежда') == 'odezhda'
+    assert transliterate('Пуховики/ Спортивные куртки', separator='-') \
+        == 'pukhoviki-sportivnye-kurtki'
