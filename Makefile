@@ -52,6 +52,7 @@ test:
 	make test-unit-all
 
 release:
+	make clean
 	$(PYTHON) setup.py sdist bdist_wheel
 	sudo $(PYTHON) -m twine upload dist/*
 

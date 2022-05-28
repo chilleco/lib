@@ -62,7 +62,11 @@ def transliterate(data, separator=' '):
         return ''
 
     data = ''.join(
-        TRANSLITERATION.get(i, separator)
+        (
+            i
+            if 'a' <= i <= 'z' else
+            TRANSLITERATION.get(i, separator)
+        )
         for i in data.strip().lower()
     )
     data = re.sub(rf'{separator}{{2,}}', separator, data)
