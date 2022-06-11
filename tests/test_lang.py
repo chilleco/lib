@@ -1,4 +1,4 @@
-from libdev.lang import get_form, transliterate
+from libdev.lang import get_form, transliterate, to_letters
 
 
 def test_form():
@@ -28,3 +28,11 @@ def test_transliterate():
     assert transliterate('Пуховики/ Спортивные куртки', separator='-') \
         == 'pukhoviki-sportivnye-kurtki'
     assert transliterate('polos') == 'polos'
+
+def test_to_letters():
+    assert to_letters(None) == ''
+    assert to_letters('') == ''
+    assert to_letters('None') == 'none'
+    assert to_letters(' 12\tLa\' tuell  e   \t ') == '12latuelle'
+    assert to_letters(' -= ☜☢ Т е к с т \n 0 0 ~ღ ° ˜♥️♉️') == 'текст00'
+    assert to_letters('₸ᾟ€‗Ҕ€₵₸ Дêβōчķẳ © хẵῥαķŧéῥổм ҈') == 'дчхм'

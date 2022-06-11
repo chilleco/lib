@@ -72,3 +72,11 @@ def transliterate(data, separator=' '):
     data = re.sub(rf'{separator}{{2,}}', separator, data)
 
     return data
+
+def to_letters(data):
+    """ To letters & numbers """
+
+    if data is None:
+        return ''
+
+    return re.sub('[^a-zа-я0-9]+', '', data.lower())

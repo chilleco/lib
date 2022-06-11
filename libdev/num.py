@@ -15,6 +15,8 @@ def is_float(value: str) -> bool:
 def to_num(value: str) -> bool:
     """ Convert value to int or float """
 
+    value = value.strip()
+
     if isinstance(value, str):
         value = float(value)
 
