@@ -73,10 +73,14 @@ def transliterate(data, separator=' '):
 
     return data
 
-def to_letters(data):
+def to_letters(data, separator=''):
     """ To letters & numbers """
 
     if data is None:
         return ''
 
-    return re.sub('[^a-zа-я0-9]+', '', data.lower())
+    data = re.sub('[^a-zа-я0-9]+', ' ' if separator else '' , data.lower())
+    if separator:
+        data = data.strip().replace(' ', separator)
+
+    return data

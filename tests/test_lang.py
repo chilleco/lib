@@ -36,3 +36,5 @@ def test_to_letters():
     assert to_letters(' 12\tLa\' tuell  e   \t ') == '12latuelle'
     assert to_letters(' -= ☜☢ Т е к с т \n 0 0 ~ღ ° ˜♥️♉️') == 'текст00'
     assert to_letters('₸ᾟ€‗Ҕ€₵₸ Дêβōчķẳ © хẵῥαķŧéῥổм ҈') == 'дчхм'
+    assert to_letters('  [\'Clothing\', \'Shirts & Tops\', \'T Shirts\']\t', separator='-') == 'clothing-shirts-tops-t-shirts'
+    assert to_letters('["Clothing", "Shirts & Tops", "T Shirt\'s"]', separator=' ') == 'clothing shirts tops t shirt s'
