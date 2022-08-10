@@ -60,8 +60,13 @@ def parse_time(data: str, tz=0):
     for day in DAYS_OF_WEEK:
         data = data.replace(day, '')
 
-    if len(data) < 13:
+    data = data.strip()
+
+    if len(data) < 7:
         return None
+
+    if len(data) < 13:
+        data += ' 00:00:00'
 
     # Parse day
     if not data[1].isdigit():
