@@ -51,6 +51,8 @@ def get_time(data=time.time(), template='%d.%m.%Y %H:%M:%S', tz=0):
 def parse_time(data: str, tz=0):
     """ Parse time """
 
+    # TODO: 16 year -> 2016 year
+
     data = data.lower()
 
     # Cut special characters
@@ -62,11 +64,41 @@ def parse_time(data: str, tz=0):
 
     data = data.strip()
 
-    if len(data) < 7:
+    if len(data) < 4:
         return None
 
-    if len(data) < 13:
-        data += ' 00:00:00'
+    for month_number, month_names in MONTHS.items():
+        for month_name in month_names:
+            if month_name in data:
+                ind = data.index(month_name)
+                data = data.replace(month_name, month_number)
+                day = re.sub(r'[^0-9]', '', data[:ind])
+                if day:
+                    data = day + '.' + data[ind:]
+                else:
+                    data = '01.' + data[ind:]
+                break
+        else:
+            continue
+        break
+    else:
+        if len(data) != 8:
+            proc = True
+            if ':' in data:
+                if len(re.sub(r'[^0-9]', '', data[:data.index(':')-2])) >= 6:
+                    proc = False
+            if proc:
+                if '.' not in data:
+                    data = '01.' + data
+                if data.count('.') < 2:
+                    data = '01.' + data
+
+    if (
+        ':' not in data
+        and len(data) < 15
+        and len(re.sub(r'[^0-9]', '', data)) <= 8
+    ):
+        data += '00:00:00'
 
     # Parse day
     if not data[1].isdigit():
@@ -75,9 +107,6 @@ def parse_time(data: str, tz=0):
         data = data[:2] + '.' + data[2:]
 
     # Parse month
-    for month_number, month_names in MONTHS.items():
-        for month_name in month_names:
-            data = data.replace(month_name, month_number)
     if data[5] != '.':
         data = data[:5] + '.' + data[5:]
 

@@ -33,6 +33,9 @@ def test_parse_time():
     assert parse_time('1мая19700:0:0') == 10368000
     # before time started
     assert parse_time('1мая10000:0:0') == -30599856000
+    assert parse_time('июнь 2020', tz=3) == 1590958800
+    assert parse_time('06.2020') == 1590969600
+    assert parse_time('2023') == 1672531200
 
 def test_parse_wrong_time():
     assert parse_time('') == None
