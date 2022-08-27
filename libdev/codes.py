@@ -26,6 +26,8 @@ NETWORKS = (
     'g', # Google
     'fb', # Facebook
     'a', # Apple
+    'in', # LinkedIn
+    'ig', # Instagram
 )
 
 STATUSES = (

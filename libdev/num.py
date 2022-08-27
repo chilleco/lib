@@ -12,13 +12,11 @@ def is_float(value: str) -> bool:
 
     return True
 
-def to_num(value: str) -> bool:
+def to_num(value) -> bool:
     """ Convert value to int or float """
 
-    value = value.strip()
-
     if isinstance(value, str):
-        value = float(value)
+        value = float(value.strip())
 
     if not value % 1:
         value = int(value)

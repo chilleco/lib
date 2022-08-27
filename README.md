@@ -6,11 +6,13 @@ Development library — Set of standard functions for development
 
 ## Submodules
 Submodule | Description
----|----
+---|---
 ` libdev.cfg ` | Configuration getting
+` libdev.num ` | Numeric conversions & handlers
 ` libdev.time ` | Time processing
 ` libdev.lang ` | Natural language formatters
 ` libdev.gen ` | Code & token generators
 ` libdev.codes ` | Ciphers: langs & flags / networks / user statuses
 ` libdev.check ` | Checking functions
+` libdev.doc ` | Documents handlers
 ` libdev.aws ` | AWS S3 file server functions

@@ -47,7 +47,7 @@ def get_time(data=time.time(), template='%d.%m.%Y %H:%M:%S', tz=0):
 
     return time.strftime(template, time.gmtime(data + tz * 3600))
 
-# pylint: disable=too-many-branches
+# pylint: disable=too-many-branches,too-many-statements
 def parse_time(data: str, tz=0):
     """ Parse time """
 

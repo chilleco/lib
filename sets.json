@@ -9,9 +9,9 @@
         }
     },
     "amazon": {
-        "id": "<ACCESS KEY ID>",
-        "secret": "<ACCESS SECRET KEY>",
-        "bucket": "<BUCKET>",
+        "id": "",
+        "secret": "",
+        "bucket": "",
         "region": "eu-central-1"
     },
     "mode": "test"
