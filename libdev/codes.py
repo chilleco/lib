@@ -11,12 +11,20 @@ LOCALES = (
     'ru',
     'es',
 )
-
 FLAGS = (
     '🇬🇧',
     '🇷🇺',
     '🇪🇸',
 )
+
+CURRENCIES = {
+    'USD': '$',
+    'RUB': '₽',
+    'EUR': '€',
+    'TRY': '₺',
+    'UAH': '₴',
+    'THB': '฿',
+}
 
 NETWORKS = (
     '', # Console
@@ -35,7 +43,6 @@ STATUSES = (
     'disabled',
     'active',
 )
-
 USER_STATUSES = (
     'removed', # deleted # not specified # Does not exist
     'blocked', # archive # Does not have access to resources
@@ -66,7 +73,7 @@ def get_network(code):
 
     return 0
 
-def get_language(code):
+def get_locale(code):
     """ Get language code by cipher """
 
     if code is None:
@@ -82,4 +89,4 @@ def get_language(code):
 
 def get_flag(code):
     """ Get flag by language """
-    return FLAGS[get_language(code)]
+    return FLAGS[get_locale(code)]
