@@ -3,6 +3,7 @@ Natural language processing functionality
 """
 
 import re
+from urllib.parse import unquote
 
 
 TRANSLITERATION = {
@@ -67,7 +68,7 @@ def transliterate(data, separator=' '):
             if 'a' <= i <= 'z' else
             TRANSLITERATION.get(i, separator)
         )
-        for i in data.strip().lower()
+        for i in unquote(data).strip().lower()
     )
     data = re.sub(rf'{separator}{{2,}}', separator, data)
 
@@ -79,7 +80,11 @@ def to_letters(data, separator=''):
     if data is None:
         return ''
 
-    data = re.sub('[^a-zа-я0-9]+', ' ' if separator else '' , data.lower())
+    data = re.sub(
+        '[^a-zа-я0-9]+',
+        ' ' if separator else '',
+        unquote(data).lower()
+    )
     if separator:
         data = data.strip().replace(' ', separator)
 

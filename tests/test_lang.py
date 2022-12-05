@@ -38,3 +38,4 @@ def test_to_letters():
     assert to_letters('₸ᾟ€‗Ҕ€₵₸ Дêβōчķẳ © хẵῥαķŧéῥổм ҈') == 'дчхм'
     assert to_letters('  [\'Clothing\', \'Shirts & Tops\', \'T Shirts\']\t', separator='-') == 'clothing-shirts-tops-t-shirts'
     assert to_letters('["Clothing", "Shirts & Tops", "T Shirt\'s"]', separator=' ') == 'clothing shirts tops t shirt s'
+    assert to_letters('diane-kr%C3%83%C2%BCger', separator='-') == 'diane-kr-ger'
