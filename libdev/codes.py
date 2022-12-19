@@ -101,7 +101,7 @@ CURRENCIES = {
     'UGX': 'Sh',
     'GHS': 'GH¢',
     'LBP': 'ل.ل',
-    'AMD': 'դր.',
+    'AMD': '֏',
     'GEL': '₾',
     'UYU': '$U',
     'CLP': '$',

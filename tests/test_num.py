@@ -1,5 +1,5 @@
 from libdev.num import (
-    is_float, to_num, find_decimals, get_whole, simplify_value,
+    is_float, to_num, find_decimals, get_whole, simplify_value, add_sign,
 )
 
 
@@ -52,3 +52,14 @@ def test_simplify():
     assert simplify_value('12.345000') == '12.34'
     assert simplify_value(0.01234, 2) == '0.012'
     assert simplify_value('012340000000') == '12340000000'
+
+def test_add_sign():
+    assert add_sign(0) == '0'
+    assert add_sign('0') == '0'
+    assert add_sign('0.') == '0.0'
+    assert add_sign(-0.) == '0.0'
+    assert add_sign('-0') == '0'
+    assert add_sign(1) == '+1'
+    assert add_sign(-100) == '-100'
+    assert add_sign(-0.000000001) == '-0.000000001'
+    assert add_sign(1.23e-10) == '+0.000000000123'

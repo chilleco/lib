@@ -87,3 +87,18 @@ def simplify_value(value, decimals=4):
         value = value[:-1]
 
     return sign + value
+
+def add_sign(value):
+    """ Add sign to a number """
+
+    if value is None:
+        return None
+
+    sign = ""
+
+    if float(value) > 0:
+        sign = "+"
+    elif value == 0:
+        value = abs(value)
+
+    return f"{sign}{get_whole(value)}"
