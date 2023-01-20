@@ -62,14 +62,11 @@ def transliterate(data, separator=' '):
     if data is None:
         return ''
 
-    data = ''.join(
-        (
-            i
-            if 'a' <= i <= 'z' else
-            TRANSLITERATION.get(i, separator)
-        )
-        for i in unquote(data).strip().lower()
-    )
+    data = ''.join((
+        i
+        if 'a' <= i <= 'z' else
+        TRANSLITERATION.get(i, separator)
+    ) for i in unquote(data).strip().lower())
     data = re.sub(rf'{separator}{{2,}}', separator, data)
 
     return data
@@ -87,5 +84,25 @@ def to_letters(data, separator=''):
     )
     if separator:
         data = data.strip().replace(' ', separator)
+
+    return data
+
+def to_url(data, separator='-'):
+    """ To url format """
+
+    if not data:
+        return None
+
+    data = ''.join((
+        i
+        if 'a' <= i <= 'z' or '0' <= i <= '9' else
+        TRANSLITERATION.get(i, separator)
+    ) for i in unquote(data).strip().lower())
+    data = re.sub(rf'{separator}{{2,}}', separator, data)
+    data = re.sub(rf'^{separator}', '', data)
+    data = re.sub(rf'{separator}$', '', data)
+
+    if not data:
+        return None
 
     return data

@@ -19,7 +19,8 @@ def test_get_locale():
 
 def test_get_flag():
     assert get_flag('ru') == '🇷🇺'
-    assert get_flag(2) == '🇪🇸'
+    assert get_flag(3) == '🇪🇸'
+    assert get_flag(14) == '🇻🇳'
     assert get_flag(None) == '🇬🇧'
     assert get_flag('ulu') == '🇬🇧'
     assert get_flag(999) == '🇬🇧'

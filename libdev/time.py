@@ -37,8 +37,11 @@ DAYS_OF_WEEK = (
 )
 
 
-def get_time(data=time.time(), template='%d.%m.%Y %H:%M:%S', tz=0):
+def get_time(data=None, template='%d.%m.%Y %H:%M:%S', tz=0):
     """ Get time from timestamp """
+
+    if data is None:
+        data = time.time()
 
     # TODO: smart TZ
 

@@ -1,4 +1,4 @@
-from libdev.lang import get_form, transliterate, to_letters
+from libdev.lang import get_form, transliterate, to_letters, to_url
 
 
 def test_form():
@@ -39,3 +39,13 @@ def test_to_letters():
     assert to_letters('  [\'Clothing\', \'Shirts & Tops\', \'T Shirts\']\t', separator='-') == 'clothing-shirts-tops-t-shirts'
     assert to_letters('["Clothing", "Shirts & Tops", "T Shirt\'s"]', separator=' ') == 'clothing shirts tops t shirt s'
     assert to_letters('diane-kr%C3%83%C2%BCger', separator='-') == 'diane-kr-ger'
+
+def test_to_url():
+    assert to_url(None) == None
+    assert to_url('') == None
+    assert to_url('None') == 'none'
+    assert to_url(' 12\tLa\' tuell  e   \t ') == '12-la-tuell-e'
+    assert to_url('%D0%9F%D1%80%D0%B0%D0%B2%D0%BE') == 'pravo'
+    assert to_url('齉籲鬱豔釁') == None
+    assert to_url('https://zh.wikipedia.org/wiki/%F0%B0%BB%9D%F0%B0%BB%9D%E9%9D%A2') == 'https-zh-wikipedia-org-wiki'
+    assert to_url(' \t齉 ulu---olo-') == 'ulu-olo'

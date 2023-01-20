@@ -9,7 +9,19 @@ from .cfg import cfg
 LOCALES = (
     'en',
     'ru',
+    'zh',
     'es',
+    'de',
+    'fr',
+    'ja',
+    'pt',
+    'it',
+    'pl',
+    'tr',
+    'nl',
+    'cs',
+    'ko',
+    'vi',
 )
 FLAGS = (
     '🇬🇧',  # 🇺🇸
@@ -21,7 +33,6 @@ FLAGS = (
     '🇯🇵',
     '🇵🇹',
     '🇮🇹',
-    '🇮🇷',
     '🇵🇱',
     '🇹🇷',
     '🇳🇱',
@@ -52,10 +63,10 @@ USER_STATUSES = (
     'blocked', # archive # Does not have access to resources
     'guest', # normal
     'authorized', # registered # confirmed # Save personal data & progress
-    'editor', # curator # View reviews
-    'verified', # Delete reviews
-    'moderator', # Block users
-    'admin', # Delete posts
+    'editor', # curator # View reviews, add verified posts
+    'verified', # Delete reviews, edit posts, add categories
+    'moderator', # View & block users, delete posts, edit & delete categories
+    'admin', # Change permissions
     'owner', # Can't be blocked
 )
 
