@@ -2,6 +2,9 @@
 Functionality of Amazon Web Services
 """
 
+import requests
+import io
+
 import boto3
 from botocore.exceptions import ClientError
 
@@ -34,12 +37,22 @@ def upload_file(
 
     if not file_type and isinstance(file, str) and '.' in file:
         file_type = file.split('.')[-1]
-    file_type = file_type.lower() if file_type else ''
+    file_type = '.' + file_type.lower() if file_type else ''
 
-    name = f"{directory}/{generate()}.{file_type}"
+    name = f"{directory}/{generate()}{file_type}"
 
     if isinstance(file, str):
-        handler = s3client.upload_file
+        if file[:4] == 'http':
+            handler = lambda file, *args, **kwargs: s3client.upload_fileobj(
+                io.BytesIO(requests.get(file, timeout=30).content),
+                *args, **kwargs,
+            )
+        else:
+            handler = s3client.upload_file
+    elif isinstance(file, bytes):
+        handler = lambda file, *args, **kwargs: s3client.upload_fileobj(
+            io.BytesIO(file), *args, **kwargs,
+        )
     else:
         handler = s3client.upload_fileobj
 
