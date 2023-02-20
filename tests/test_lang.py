@@ -1,4 +1,4 @@
-from libdev.lang import get_form, transliterate, to_letters, to_url
+from libdev.lang import get_form, transliterate, to_letters, to_url, get_pure
 
 
 def test_form():
@@ -49,3 +49,12 @@ def test_to_url():
     assert to_url('齉籲鬱豔釁') == None
     assert to_url('https://zh.wikipedia.org/wiki/%F0%B0%BB%9D%F0%B0%BB%9D%E9%9D%A2') == 'https-zh-wikipedia-org-wiki'
     assert to_url(' \t齉 ulu---olo-') == 'ulu-olo'
+
+def test_get_pure():
+    assert get_pure(None) == ''
+    assert get_pure('') == ''
+    assert get_pure('123') == '123'
+    assert get_pure('a\nb') == 'a\nb'
+    assert get_pure('\na\r\nb') == 'a\nb'
+    assert get_pure('\n\n&nbsp;a\r\n\nb') == 'a\nb'
+    assert get_pure('\n\n&nbsp;<br /><br />a<br>   x&nbsp;y    z\r\n\nb<br/>') == 'a\nx y z\nb'

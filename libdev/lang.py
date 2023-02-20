@@ -106,3 +106,19 @@ def to_url(data, separator='-'):
         return None
 
     return data
+
+def get_pure(data):
+    """ Get pure text without symbols & tags """
+
+    if not data:
+        return ''
+
+    without_br = re.sub(r'<[^>]*br[^>]*>', '\n', data)
+    without_enter = re.sub(r'\r', '\n', without_br)
+    without_block = re.sub(r'<\/[^>]*p[^>]*>', '\n', without_enter)
+    without_tag = re.sub(r'<[^>]+>', '', without_block)
+    without_space = re.sub(r'&nbsp;', ' ', without_tag)
+    without_double_space = re.sub(r' {2,}', ' ', without_space)
+    without_double_enter = re.sub(r'\n{2,}', '\n', without_double_space)
+    without_enter_space = re.sub(r'\n ', '\n', without_double_enter)
+    return without_enter_space.strip()
