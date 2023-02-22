@@ -112,6 +112,16 @@ CURRENCY_SYMBOLS = {
     'TZS': 'TSh',
     'XOF': 'FCFA',
     'RWF': 'FRw',
+    'BZD': '$',
+    'GMD': 'D',
+    'HTG': 'G',
+    'SLL': 'Le',
+    'CVE': '$',
+    'JMD': '$',
+    'LRD': 'L$',
+    'MRU': 'UM',
+    'BSD': 'B$',
+    'TTD': 'TT$',
 }
 
 CURRENCY_TITLES = {
@@ -224,6 +234,16 @@ CURRENCY_TITLES = {
     'TZS': 'Tanzanian Shilling',
     'XOF': 'West African CFA Franc',
     'RWF': 'Rwandan Franc',
+    'BZD': 'Belize Dollar',
+    'GMD': 'Gambian Dalasi',
+    'HTG': 'Haitian Gourde',
+    'SLL': 'Sierra Leonean Leone',
+    'CVE': 'Cape Verde Escudo',
+    'JMD': 'Jamaican Dollar',
+    'LRD': 'Liberian Dollar',
+    'MRU': 'Mauritanian Ouguiya',
+    'BSD': 'Bahamian Dollar',
+    'TTD': 'Trinidad and Tobago Dollar',
 }
 
 CURRENCY_RATES = {
@@ -247,7 +267,7 @@ CURRENCY_RATES = {
     'CNY': 7.02,
     'PHP': 55.73,
     'UAH': 36.78,
-    'RUB': 62.51,
+    'RUB': 74.86,
     'TWD': 30.56,
     'BGN': 1.86,
     'SAR': 3.75,
@@ -319,4 +339,14 @@ CURRENCY_RATES = {
     'YER': 250.30,
     'ZMW': 17.73,
     'ZWD': 322.0,
+    'BZD': 2.01,
+    'GMD': 62.60,
+    'HTG': 149.30,
+    'SLL': 20.0,
+    'CVE': 103.62,
+    'JMD': 154.15,
+    'LRD': 157.69,
+    'MRU': 36.30,
+    'BSD': 1.0,
+    'TTD': 6.78,
 }
