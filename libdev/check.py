@@ -2,6 +2,9 @@
 Checking functionality
 """
 
+import re
+
+
 def fake_phone(value: str) -> bool:
     """ Check a phone for a test format """
 
@@ -20,7 +23,7 @@ def fake_phone(value: str) -> bool:
     )
 
 def fake_login(value: str) -> bool:
-    """ Check a login / name / mail for a test format """
+    """ Check a login / name for a test format """
 
     if value is None:
         return False
@@ -37,3 +40,13 @@ def fake_login(value: str) -> bool:
             'ыва', 'фыв', 'йцу', 'орп',
         )
     )
+
+def check_mail(value: str) -> bool:
+    """ Check mail validity """
+    if value is None:
+        return False
+    return re.match(r'.{1,64}@.{1,63}\..{1,15}', value) is not None
+
+def fake_mail(value: str) -> bool:
+    """ Check a mail for a test format """
+    return not check_mail(value) or fake_login(value)
