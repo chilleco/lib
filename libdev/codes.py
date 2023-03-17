@@ -123,7 +123,8 @@ LOCALES = (
     # 'ch',  # Chamorro
     # 'co',  # Corsican
     # 'cr',  # Cree
-    # 'cu',  # Church Slavic; Old Slavonic; Church Slavonic; Old Bulgarian; Old Church Slavonic
+    # 'cu',  # Church Slavic; Old Slavonic; Church Slavonic;
+    # Old Bulgarian; Old Church Slavonic
     # 'cv',  # Chuvash
     # 'dv',  # Divehi; Dhivehi; Maldivian
     # 'dz',  # Dzongkha

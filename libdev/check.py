@@ -36,6 +36,7 @@ def fake_login(value: str) -> bool:
             'test', 'тест', 'check',
             'asd', 'qwe', 'rty', 'sdf', 'sfg', 'sfd', 'hgf', 'gfd',
             'qaz', 'wsx', 'edc', 'rfv',
+            'lalala', 'lolkek',
             '111', '123',
             'ыва', 'фыв', 'йцу', 'орп',
         )
