@@ -56,4 +56,4 @@ def convert(image, image_type='webp'):
     data = io.BytesIO()
     image.save(data, format=image_type)
 
-    return data
+    return data.getvalue()
