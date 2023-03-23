@@ -126,10 +126,10 @@ def add_radix(value, symbol="’"):
     data = ""
     ind = 0
     for i in integer[::-1]:
+        if ind and ind % 3 == 0:
+            data = symbol + data
         ind += 1
         data = i + data
-        if ind % 3 == 0:
-            data = symbol + data
 
     data = sign + data
     if fractional:

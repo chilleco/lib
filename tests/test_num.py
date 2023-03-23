@@ -71,4 +71,5 @@ def test_add_radix():
     assert add_radix(0.) == '0.0'
     assert add_radix(.1) == '0.1'
     assert add_radix(1234) == '1’234'
+    assert add_radix(123456) == '123’456'
     assert add_radix(1234567.89012) == '1’234’567.89012'
