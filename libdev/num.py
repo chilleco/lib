@@ -102,3 +102,37 @@ def add_sign(value):
         value = abs(value)
 
     return f"{sign}{get_whole(value)}"
+
+def add_radix(value, symbol="’"):
+    """ Add radix to a number """
+
+    if value is None:
+        return None
+
+    value = str(value)
+
+    if '.' in value:
+        integer, fractional = value.split('.')
+    else:
+        integer = value
+        fractional = ""
+
+    if integer[0] == '-':
+        sign = "-"
+        integer = integer[1:]
+    else:
+        sign = ""
+
+    data = ""
+    ind = 0
+    for i in integer[::-1]:
+        ind += 1
+        data = i + data
+        if ind % 3 == 0:
+            data = symbol + data
+
+    data = sign + data
+    if fractional:
+        data += "." + fractional
+
+    return data

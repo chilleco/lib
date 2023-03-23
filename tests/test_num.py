@@ -1,5 +1,6 @@
 from libdev.num import (
     is_float, to_num, find_decimals, get_whole, simplify_value, add_sign,
+    add_radix,
 )
 
 
@@ -63,3 +64,11 @@ def test_add_sign():
     assert add_sign(-100) == '-100'
     assert add_sign(-0.000000001) == '-0.000000001'
     assert add_sign(1.23e-10) == '+0.000000000123'
+
+def test_add_radix():
+    assert add_radix(None) == None
+    assert add_radix(0) == '0'
+    assert add_radix(0.) == '0.0'
+    assert add_radix(.1) == '0.1'
+    assert add_radix(1234) == '1’234'
+    assert add_radix(1234567.89012) == '1’234’567.89012'
