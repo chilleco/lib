@@ -1,4 +1,6 @@
-from libdev.check import fake_phone, fake_login, check_mail, fake_mail
+from libdev.check import (
+    fake_phone, fake_login, check_mail, fake_mail, check_url, get_last_url,
+)
 
 
 def test_phone():
@@ -26,3 +28,26 @@ def test_name():
     assert fake_login('Тест') == True
     assert fake_login('aSdR') == True
     assert fake_login('Алексей') == False
+
+def test_check_url():
+    assert check_url(None) == False
+    assert check_url('') == False
+    assert check_url('http') == False
+    assert check_url('http://') == False
+    assert check_url('http://a/') == False
+    assert check_url('http://a.b') == False
+    assert check_url('http://a.bc') == True
+    assert check_url('https://chill.services/') == True
+    assert check_url('https://t.me/kosyachniy') == True
+
+def test_get_last_url():
+    assert get_last_url(None) == None
+    assert get_last_url('') == ''
+    assert get_last_url('https://vk.com/alexeypoloz/') == 'alexeypoloz'
+    assert get_last_url('https://vk.com/alexeypoloz') == 'alexeypoloz'
+    assert get_last_url('://vk.com/alexeypoloz') == 'alexeypoloz'
+    assert get_last_url('//vk.com/alexeypoloz') == 'alexeypoloz'
+    assert get_last_url('/vk.com/alexeypoloz') == 'alexeypoloz'
+    assert get_last_url('vk.com/alexeypoloz') == 'alexeypoloz'
+    assert get_last_url('/alexeypoloz') == 'alexeypoloz'
+    assert get_last_url('alexeypoloz') == 'alexeypoloz'
