@@ -1,7 +1,42 @@
 from libdev.check import (
-    fake_phone, fake_login, check_mail, fake_mail, check_url, get_last_url,
+    check_phone, fake_phone,
+    fake_login, check_mail, fake_mail,
+    check_url, get_last_url,
 )
 
+def test_phone():
+    assert check_phone(79000000001) == True
+    assert check_phone('+79121231234') == True
+    assert check_phone('79697366730') == True
+    assert check_phone('+7 (969) 736 67 30') == True
+    assert check_phone('(+351) 282 43 50 50') == True
+    assert check_phone('1-234-567-8901') == True
+    assert check_phone('1 (234) 567-8901') == True
+    assert check_phone('1.234.567.8901') == True
+    assert check_phone('1/234/567/8901') == True
+    assert check_phone('12345678901') == True
+    assert check_phone('+63.917.123.4567') == True
+    assert check_phone('+63-917-123-4567') == True
+    assert check_phone('+63 917 123 4567') == True
+    assert check_phone('+639171234567') == True
+    assert check_phone('09171234567') == True
+    assert check_phone('90191919908') == True
+    assert check_phone('555-8909') == True
+    assert check_phone('001 6867684') == True
+    assert check_phone('1 (234) 567-8901') == True
+    assert check_phone('(123)8575973') == True
+    assert check_phone('(0055)(123)8575973') == True
+    assert check_phone('+1 282 282 2828') == True
+    # assert check_phone('1-234-567-8901 x1234') == True
+    # assert check_phone('1-234-567-8901 ext1234') == True
+    # assert check_phone('001 6867684x1') == True
+    # assert check_phone('1-234 567.89/01 ext.1234') == True
+    # assert check_phone('1(234)5678901x1234') == True
+    assert check_phone('On $n, it saves:') == False
+    assert check_phone('privet') == False
+    assert check_phone('privet 123') == False
+    assert check_phone('1') == False
+    assert check_phone('123.') == False
 
 def test_phone():
     assert fake_phone(79000000001) == True

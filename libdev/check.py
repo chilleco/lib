@@ -3,7 +3,14 @@ Checking functionality
 """
 
 import re
+from typing import Union
 
+
+def check_phone(value: Union[str, int]) -> bool:
+    """ Check phone validity """
+    if isinstance(value, int):
+        value = str(value)
+    return re.match(r'^\(?\+?[0-9\s\-\(\)./]{7,30}$', value) is not None
 
 def fake_phone(value: str) -> bool:
     """ Check a phone for a test format """
