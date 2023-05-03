@@ -6,11 +6,17 @@ import re
 from typing import Union
 
 
+PATTERN_PHONE = r'\(?\+?[0-9\s\-\(\)./]{7,30}'
+
+
 def check_phone(value: Union[str, int]) -> bool:
     """ Check phone validity """
     if isinstance(value, int):
         value = str(value)
-    return re.match(r'^\(?\+?[0-9\s\-\(\)./]{7,30}$', value) is not None
+    return re.match(PATTERN_PHONE, value) is not None
+
+def rm_phone(value: Union[str, int]) -> str:
+    return re.sub(PATTERN_PHONE, '', value).strip()
 
 def fake_phone(value: str) -> bool:
     """ Check a phone for a test format """
