@@ -1,6 +1,6 @@
 from libdev.num import (
-    is_float, to_num, find_decimals, get_whole, simplify_value, add_sign,
-    add_radix,
+    is_float, to_num, to_int, find_decimals, get_whole, simplify_value,
+    add_sign, add_radix,
 )
 
 
@@ -29,6 +29,14 @@ def test_num():
     assert to_num('-.0') == 0
     assert to_num(-4.5) == -4.5
     assert to_num(5.0) == 5
+
+def test_int():
+    assert to_int(None) == 0
+    assert to_int(0) == 0
+    assert to_int('') == 0
+    assert to_int('0') == 0
+    assert to_int('&nbsp;0') == 0
+    assert to_int('    \t\n12 -34 .&7a8') == 123478
 
 def test_decimals():
     assert find_decimals(0) == 0

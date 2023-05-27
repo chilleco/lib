@@ -2,6 +2,7 @@
 Numbers functionality
 """
 
+import re
 import decimal
 
 
@@ -28,6 +29,14 @@ def to_num(value) -> bool:
         value = int(value)
 
     return value
+
+def to_int(value) -> int:
+    """ Choose only decimal """
+
+    if not value:
+        return 0
+
+    return int(re.sub(r'\D', '', str(value)))
 
 def find_decimals(value):
     """ Get count of decimal """
