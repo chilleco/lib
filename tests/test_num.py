@@ -1,6 +1,6 @@
 from libdev.num import (
-    is_float, to_num, to_int, find_decimals, get_whole, simplify_value,
-    add_sign, add_radix,
+    is_float, to_num, to_int, get_float, find_decimals, get_whole,
+    simplify_value, add_sign, add_radix,
 )
 
 
@@ -37,6 +37,26 @@ def test_int():
     assert to_int('0') == 0
     assert to_int('&nbsp;0') == 0
     assert to_int('    \t\n12 -34 .&7a8') == 123478
+
+def test_get_float():
+    assert get_float(None) == []
+    assert get_float('') == []
+    assert get_float('asd') == []
+    assert get_float('0.0') == [0.]
+    assert get_float('0.') == [0.]
+    assert get_float('.0') == [0.]
+    assert get_float('0') == [0.]
+    assert get_float('123') == [123.]
+    assert get_float('asd 1.2') == [1.2]
+    assert get_float('asd1.2fgh') == [1.2]
+    assert get_float('asd1.2fgh3') == [1.2, 3.]
+    assert get_float('1 2') == [1., 2.]
+    assert get_float('1.2%.3') == [1.2, 0.3]
+    assert get_float('1.2-.3') == [1.2, -0.3]
+    assert get_float('1.2.3') == [1.2, 0.3]
+    assert get_float('1..2') == [1., 0.2]
+    assert get_float('1...2') == [1., 0.2]
+
 
 def test_decimals():
     assert find_decimals(0) == 0

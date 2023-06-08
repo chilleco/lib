@@ -38,6 +38,15 @@ def to_int(value) -> int:
 
     return int(re.sub(r'\D', '', str(value)))
 
+def get_float(value) -> list:
+    """ Get a list of floats """
+
+    if value is None:
+        return []
+
+    numbers = re.findall(r"[-+]?\d*\.\d+|[-+]?\d+", value)
+    return [float(number) for number in numbers]
+
 def find_decimals(value):
     """ Get count of decimal """
 
