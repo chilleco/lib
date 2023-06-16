@@ -1,6 +1,6 @@
 from libdev.num import (
     is_float, to_num, to_int, get_float, find_decimals, get_whole,
-    simplify_value, add_sign, add_radix,
+    simplify_value, add_sign, add_radix, to_step,
 )
 
 
@@ -101,3 +101,17 @@ def test_add_radix():
     assert add_radix(1234) == '1’234'
     assert add_radix(123456) == '123’456'
     assert add_radix(1234567.89012) == '1’234’567.89012'
+
+def test_to_step():
+    assert to_step(None) == None
+    assert to_step(0) == 0
+    assert to_step(0.) == 0
+    assert to_step(0.1) == 0
+    assert to_step(1.2) == 1
+    assert to_step(1.2, 0.1) == 1.2
+    assert to_step(1.234, 0.1) == 1.2
+    assert to_step(1.234, 0.1, True) == 1.3
+    assert to_step(1.2, 0.1, True) == 1.2
+    assert to_step(1.2, 10) == 0
+    assert to_step(1.2, 10, True) == 10
+    assert to_step(123.456, 10) == 120

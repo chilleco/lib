@@ -3,7 +3,8 @@ Numbers functionality
 """
 
 import re
-import decimal
+import math
+from decimal import Decimal
 
 
 def is_float(value: str) -> bool:
@@ -54,7 +55,7 @@ def find_decimals(value):
         while value[-1] == "0":
             value = value[:-1]
 
-    return abs(decimal.Decimal(str(value)).as_tuple().exponent)
+    return abs(Decimal(str(value)).as_tuple().exponent)
 
 def get_whole(value):
     """ Get whole view of a number """
@@ -154,3 +155,16 @@ def add_radix(value, symbol="’"):
         data += "." + fractional
 
     return data
+
+def to_step(value, step=1, side=False):
+    """ Change value step """
+
+    if value is None:
+        return None
+
+    value = float(Decimal(str(value)) / Decimal(str(step)))
+    if side:
+        value = math.ceil(value)
+    else:
+        value = math.floor(value)
+    return float(Decimal(str(value)) * Decimal(str(step)))
