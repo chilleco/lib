@@ -115,3 +115,5 @@ def test_to_step():
     assert to_step(1.2, 10) == 0
     assert to_step(1.2, 10, True) == 10
     assert to_step(123.456, 10) == 120
+    assert isinstance(to_step(12, 0.1), float)
+    assert isinstance(to_step(12.456, 1), int)

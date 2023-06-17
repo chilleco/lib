@@ -16,6 +16,7 @@ def check_phone(value: Union[str, int]) -> bool:
     return re.match(PATTERN_PHONE, value) is not None
 
 def rm_phone(value: Union[str, int]) -> str:
+    """ Remove phone number """
     return re.sub(PATTERN_PHONE, '', value).strip()
 
 def fake_phone(value: str) -> bool:
@@ -69,6 +70,7 @@ def check_url(data: str) -> bool:
     """ Check url validity """
     if data is None:
         return False
+    # pylint: disable=line-too-long
     return re.match(r"^(?:(?:(?:https?|ftp):)?\/\/)(?:\S+(?::\S*)?@)?(?:(?!(?:10|127)(?:\.\d{1,3}){3})(?!(?:169\.254|192\.168)(?:\.\d{1,3}){2})(?!172\.(?:1[6-9]|2\d|3[0-1])(?:\.\d{1,3}){2})(?:[1-9]\d?|1\d\d|2[01]\d|22[0-3])(?:\.(?:1?\d{1,2}|2[0-4]\d|25[0-5])){2}(?:\.(?:[1-9]\d?|1\d\d|2[0-4]\d|25[0-4]))|(?:(?:[a-z0-9\u00a1-\uffff][a-z0-9\u00a1-\uffff_-]{0,62})?[a-z0-9\u00a1-\uffff]\.)+(?:[a-z\u00a1-\uffff]{2,}\.?))(?::\d{2,5})?(?:[/?#]\S*)?$", data) is not None
 
 def get_last_url(data: str) -> str:

@@ -156,15 +156,28 @@ def add_radix(value, symbol="’"):
 
     return data
 
+def mul(x, y):
+    """ Multiply fractions correctly """
+    return float(Decimal(str(x)) * Decimal(str(y)))
+
+def div(x, y):
+    """ Divide fractions correctly """
+    return float(Decimal(str(x)) / Decimal(str(y)))
+
 def to_step(value, step=1, side=False):
     """ Change value step """
 
     if value is None:
         return None
 
-    value = float(Decimal(str(value)) / Decimal(str(step)))
+    value = div(value, step)
     if side:
         value = math.ceil(value)
     else:
         value = math.floor(value)
-    return float(Decimal(str(value)) * Decimal(str(step)))
+    value = mul(value, step)
+
+    if step >= 1:
+        value = int(value)
+
+    return value
