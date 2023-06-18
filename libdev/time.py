@@ -146,41 +146,80 @@ def parse_time(data: str, tz=0):
 
     return int(data.timestamp())
 
-def format_delta(sec, short=False):
+def format_delta(sec, short=False, locale='ru'):
     """ Format time delta in words by seconds """
 
     if abs(sec) >= 259200: # 3 days
         time_def = round(sec / (24 * 60 * 60))
-        if short:
-            delta = f"{time_def}д"
+        delta = f"{time_def}"
+
+        if locale == 'ru':
+            if short:
+                delta += "д"
+            else:
+                delta += f" {get_form(time_def, ('день', 'дня', 'дней'))}"
         else:
-            delta = f"{time_def} {get_form(time_def, ('день', 'дня', 'дней'))}"
+            if short:
+                delta += "d"
+            else:
+                if time_def == 1:
+                    delta += f" day"
+                else:
+                    delta += f" days"
 
     elif abs(sec) >= 10800: # 3 hours
         time_def = round(sec / (60 * 60))
-        if short:
-            delta = f"{time_def}ч"
+        delta = f"{time_def}"
+
+        if locale == 'ru':
+            if short:
+                delta += "ч"
+            else:
+                delta += f" {get_form(time_def, ('час', 'часа', 'часов'))}"
         else:
-            delta = f"{time_def} {get_form(time_def, ('час', 'часа', 'часов'))}"
+            if short:
+                delta += "h"
+            else:
+                if time_def == 1:
+                    delta += f" hour"
+                else:
+                    delta += f" hours"
 
     elif abs(sec) > 180: # 3 min
         time_def = round(sec / 60)
-        if short:
-            delta = f"{time_def}мин"
+        delta = f"{time_def}"
+
+        if locale == 'ru':
+            if short:
+                delta += "мин"
+            else:
+                delta += f" {get_form(time_def, ('минута', 'минуты', 'минут'))}"
         else:
-            delta = (
-                f"{time_def}"
-                f" {get_form(time_def, ('минута', 'минуты', 'минут'))}"
-            )
+            if short:
+                delta += "min"
+            else:
+                if time_def == 1:
+                    delta += f" minute"
+                else:
+                    delta += f" minutes"
 
     else:
         time_def = int(sec)
-        if short:
-            delta = f"{time_def}сек"
+        delta = f"{time_def}"
+
+        if locale == 'ru':
+            if short:
+                delta += "сек"
+            else:
+                delta += \
+                    f" {get_form(time_def, ('секунда', 'секунды', 'секунд'))}"
         else:
-            delta = (
-                f"{time_def}"
-                f" {get_form(time_def, ('секунда', 'секунды', 'секунд'))}"
-            )
+            if short:
+                delta += "s"
+            else:
+                if time_def == 1:
+                    delta += " second"
+                else:
+                    delta += " seconds"
 
     return delta

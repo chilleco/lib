@@ -61,6 +61,11 @@ def test_format_delta():
     assert format_delta(-1) == '-1 секунда'
     assert format_delta(-181) == '-3 минуты'
     assert format_delta(-432000) == '-5 дней'
+    assert format_delta(1, locale='en') == '1 second'
+    assert format_delta(1000, locale='en') == '17 minutes'
+    assert format_delta(173000, True, 'en') == '48h'
+    assert format_delta(259500, True, 'en') == '3d'
+    assert format_delta(173000, locale='en') == '48 hours'
 
 def test_format_delta_short():
     assert format_delta(0, short=True) == '0сек'
