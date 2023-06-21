@@ -158,10 +158,14 @@ def add_radix(value, symbol="’"):
 
 def mul(x, y):
     """ Multiply fractions correctly """
+    if x is None or y is None:
+        return None
     return float(Decimal(str(x)) * Decimal(str(y)))
 
 def div(x, y):
     """ Divide fractions correctly """
+    if x is None or y is None:
+        return None
     return float(Decimal(str(x)) / Decimal(str(y)))
 
 def to_step(value, step=1, side=False):
