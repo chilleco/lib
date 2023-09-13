@@ -163,9 +163,9 @@ def format_delta(sec, short=False, locale='ru'):
                 delta += "d"
             else:
                 if time_def == 1:
-                    delta += f" day"
+                    delta += " day"
                 else:
-                    delta += f" days"
+                    delta += " days"
 
     elif abs(sec) >= 10800: # 3 hours
         time_def = round(sec / (60 * 60))
@@ -181,9 +181,9 @@ def format_delta(sec, short=False, locale='ru'):
                 delta += "h"
             else:
                 if time_def == 1:
-                    delta += f" hour"
+                    delta += " hour"
                 else:
-                    delta += f" hours"
+                    delta += " hours"
 
     elif abs(sec) > 180: # 3 min
         time_def = round(sec / 60)
@@ -199,9 +199,9 @@ def format_delta(sec, short=False, locale='ru'):
                 delta += "min"
             else:
                 if time_def == 1:
-                    delta += f" minute"
+                    delta += " minute"
                 else:
-                    delta += f" minutes"
+                    delta += " minutes"
 
     else:
         time_def = int(sec)

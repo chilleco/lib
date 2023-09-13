@@ -8,11 +8,11 @@
             "bar": true
         }
     },
-    "amazon": {
-        "id": "",
-        "secret": "",
-        "bucket": "",
-        "region": "eu-central-1"
+    "s3": {
+        "host": "https://s3.chill.services/",
+        "user": "admin",
+        "pass": ""
     },
+    "project_name": "test",
     "mode": "test"
 }

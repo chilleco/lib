@@ -75,6 +75,9 @@ def get_whole(value):
 def simplify_value(value, decimals=4):
     """ Get the significant part of a number """
 
+    if value is None:
+        return None
+
     value = get_whole(value)
     if '.' not in value:
         value += '.'

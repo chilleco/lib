@@ -17,4 +17,4 @@ Submodule | Description
 ` libdev.fin ` | Financial codes and tools
 ` libdev.check ` | Checking functions
 ` libdev.doc ` | Documents handlers
-` libdev.aws ` | AWS S3 file server functions
+` libdev.s3 ` | S3 file server functions

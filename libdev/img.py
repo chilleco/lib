@@ -23,11 +23,11 @@ def fix_rotation(image):
     if exif and orientation in exif:
         exif = dict(exif.items())
         if exif[orientation] == 3:
-            image = image.transpose(Image.ROTATE_180)
+            image = image.transpose(3)
         if exif[orientation] == 6:
-            image = image.transpose(Image.ROTATE_270)
+            image = image.transpose(4)
         if exif[orientation] == 8:
-            image = image.transpose(Image.ROTATE_90)
+            image = image.transpose(2)
 
     return image
 
