@@ -48,11 +48,12 @@ def fake_login(value: str) -> bool:
         fake in value
         for fake in (
             'test', 'тест', 'check',
-            'asd', 'qwe', 'rty', 'sdf', 'sfg', 'sfd', 'hgf', 'gfd',
+            'asd', 'qwe', 'sdf', 'sfg', 'sfd', 'hgf', 'gfd', 'dgf',
             'qaz', 'wsx', 'edc', 'rfv',
             'lalala', 'lolkek',
-            '111', '123',
-            'ыва', 'фыв', 'йцу', 'орп',
+            '1111', '1234', '1212', '2323', '987',
+            'ыва', 'фыв', 'йцу',
+            'aaa', 'bbb', 'ccc', 'rrr', 'zzz',
         )
     )
 
@@ -64,6 +65,8 @@ def check_mail(value: str) -> bool:
 
 def fake_mail(value: str) -> bool:
     """ Check a mail for a test format """
+    if value is None:
+        return False
     return not check_mail(value) or fake_login(value)
 
 def check_url(data: str) -> bool:
