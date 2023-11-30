@@ -30,7 +30,8 @@ def fake_phone(value: str) -> bool:
     return any(
         fake in value
         for fake in (
-            '00000', '11111', '22222', '33333', '44444', '55555', '66666', '77777', '88888', '99999', '12345', '98765',
+            '00000', '11111', '22222', '33333', '44444', '55555', '66666',
+            '77777', '88888', '99999', '12345', '98765',
             #'2345', '3456', '4567', '5678', '6789',
             # '8765', '7654', '6543', '5432', '4321',
         )
@@ -47,9 +48,9 @@ def fake_login(value: str) -> bool:
     return any(
         fake in value
         for fake in (
-            'test', 'тест', 'check',
-            'asd', 'qwe', 'sdf', 'sfg', 'sfd', 'hgf', 'gfd', 'dgf',
-            'qaz', 'wsx', 'edc', 'rfv',
+            'test', 'тест', 'check', 'demo',
+            'asd', 'asf', 'qwe', 'sdf', 'sfg', 'sfd', 'hgf', 'gfd', 'dgf',
+            'qaz', 'wsx', 'edc', 'rfv', 'qwd',
             'lalala', 'lolkek',
             '0000', '1111', '2222', '3333', '4444', '5555', '6666', '7777',
             '8888', '9999', '1234', '9876',  # '1212', '2323'
@@ -70,9 +71,16 @@ def check_mail(value: str) -> bool:
 
 def fake_mail(value: str) -> bool:
     """ Check a mail for a test format """
+
     if value is None:
         return False
-    return not check_mail(value) or fake_login(value)
+
+    fake = (
+        not check_mail(value)
+        or fake_login(value)
+        or not re.search(r'@[a-zA-Z]+\.', value)
+    )
+    return fake
 
 def check_url(data: str) -> bool:
     """ Check url validity """

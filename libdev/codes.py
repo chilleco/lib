@@ -327,9 +327,7 @@ USER_STATUSES = (
     'admin', # Change permissions
     'owner', # Can't be blocked
 )
-
-
-default_locale = cfg('locale', 0)
+DEFAULT_LOCALE = LOCALES.index(cfg('locale', 'en'))
 
 
 def get_network(code):
@@ -350,7 +348,7 @@ def get_locale(code):
     """ Get language code by cipher """
 
     if code is None:
-        return default_locale
+        return DEFAULT_LOCALE
 
     if code in LOCALES:
         return LOCALES.index(code)
@@ -358,7 +356,7 @@ def get_locale(code):
     if code in range(len(LOCALES)):
         return code
 
-    return default_locale
+    return DEFAULT_LOCALE
 
 def get_flag(code):
     """ Get flag by language """

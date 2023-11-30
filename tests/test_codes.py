@@ -24,3 +24,5 @@ def test_get_flag():
     assert get_flag(None) == '🇬🇧'
     assert get_flag('ulu') == '🇬🇧'
     assert get_flag(999) == '🇬🇧'
+    assert get_flag('') == '🇬🇧'
+    assert get_flag(None) == '🇬🇧'
