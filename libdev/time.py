@@ -50,6 +50,23 @@ def get_time(data=None, template='%d.%m.%Y %H:%M:%S', tz=0):
 
     return time.strftime(template, time.gmtime(data + tz * 3600))
 
+def decode_time(data=None, template='%d.%m.%Y %H:%M:%S', tz=0):
+    """ Get timestamp from time """
+
+    if not data:
+        return None
+
+    try:
+        data = datetime.datetime.strptime(data, template)
+    except ValueError:
+        return None
+
+    data = data.replace(
+        tzinfo=datetime.timezone(datetime.timedelta(hours=tz))
+    )
+
+    return int(data.timestamp())
+
 # pylint: disable=too-many-branches,too-many-statements
 def parse_time(data: str, tz=0):
     """ Parse time """
