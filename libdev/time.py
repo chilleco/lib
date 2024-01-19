@@ -42,6 +42,8 @@ def get_time(data=None, template='%d.%m.%Y %H:%M:%S', tz=0):
 
     if data is None:
         data = time.time()
+    if isinstance(data, str):
+        return data
 
     # TODO: smart TZ
 
@@ -55,6 +57,8 @@ def decode_time(data=None, template='%d.%m.%Y %H:%M:%S', tz=0):
 
     if not data:
         return None
+    if isinstance(data, int):
+        return data
 
     try:
         data = datetime.datetime.strptime(data, template)
