@@ -167,7 +167,7 @@ def parse_time(data: str, tz=0):
 
     return int(data.timestamp())
 
-def format_delta(sec, short=False, locale='ru'):
+def format_delta(sec, short=False, locale='en'):
     """ Format time delta in words by seconds """
 
     if abs(sec) >= 259200: # 3 days

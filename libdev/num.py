@@ -8,7 +8,7 @@ from decimal import Decimal
 
 
 def is_float(value: str) -> bool:
-    """ Check value for float """
+    """Check value for float"""
 
     try:
         float(value)
@@ -17,8 +17,9 @@ def is_float(value: str) -> bool:
 
     return True
 
+
 def to_num(value) -> bool:
-    """ Convert value to int or float """
+    """Convert value to int or float"""
 
     if value is None:
         return None
@@ -31,16 +32,18 @@ def to_num(value) -> bool:
 
     return value
 
+
 def to_int(value) -> int:
-    """ Choose only decimal """
+    """Choose only decimal"""
 
     if not value:
         return 0
 
-    return int(re.sub(r'\D', '', str(value)))
+    return int(re.sub(r"\D", "", str(value)))
+
 
 def get_float(value) -> list:
-    """ Get a list of floats """
+    """Get a list of floats"""
 
     if value is None:
         return []
@@ -48,8 +51,9 @@ def get_float(value) -> list:
     numbers = re.findall(r"[-+]?\d*\.\d+|[-+]?\d+", value)
     return [float(number) for number in numbers]
 
+
 def find_decimals(value):
-    """ Get count of decimal """
+    """Get count of decimal"""
 
     if isinstance(value, str):
         while value[-1] == "0":
@@ -57,12 +61,11 @@ def find_decimals(value):
 
     return abs(Decimal(str(value)).as_tuple().exponent)
 
-def get_whole(value):
-    """ Get whole view of a number """
 
-    if isinstance(value, int) or (
-        isinstance(value, str) and '.' not in value
-    ):
+def get_whole(value):
+    """Get whole view of a number"""
+
+    if isinstance(value, int) or (isinstance(value, str) and "." not in value):
         # NOTE: to remove 0 in the start of the string
         return str(int(value))
 
@@ -72,17 +75,18 @@ def get_whole(value):
     # NOTE: to avoid the exponential form of the number
     return f"{value:.{find_decimals(value)}f}"
 
+
 def simplify_value(value, decimals=4):
-    """ Get the significant part of a number """
+    """Get the significant part of a number"""
 
     if value is None:
         return None
 
     value = get_whole(value)
-    if '.' not in value:
-        value += '.'
+    if "." not in value:
+        value += "."
 
-    whole, fractional = value.split('.')
+    whole, fractional = value.split(".")
 
     if value[0] == "-":
         sign = "-"
@@ -92,7 +96,7 @@ def simplify_value(value, decimals=4):
 
     if whole != "0":
         digit = len(whole)
-        value = whole + "." + fractional[:max(0, decimals-digit)]
+        value = whole + "." + fractional[: max(0, decimals - digit)]
 
     else:
         offset = 0
@@ -110,8 +114,9 @@ def simplify_value(value, decimals=4):
 
     return sign + value
 
+
 def add_sign(value):
-    """ Add sign to a number """
+    """Add sign to a number"""
 
     if value is None:
         return None
@@ -125,21 +130,22 @@ def add_sign(value):
 
     return f"{sign}{get_whole(value)}"
 
+
 def add_radix(value, symbol="’"):
-    """ Add radix to a number """
+    """Add radix to a number"""
 
     if value is None:
         return None
 
     value = str(value)
 
-    if '.' in value:
-        integer, fractional = value.split('.')
+    if "." in value:
+        integer, fractional = value.split(".")
     else:
         integer = value
         fractional = ""
 
-    if integer[0] == '-':
+    if integer[0] == "-":
         sign = "-"
         integer = integer[1:]
     else:
@@ -159,20 +165,37 @@ def add_radix(value, symbol="’"):
 
     return data
 
+
 def mul(x, y):
-    """ Multiply fractions correctly """
+    """Multiply fractions correctly"""
     if x is None or y is None:
         return None
     return float(Decimal(str(x)) * Decimal(str(y)))
 
+
 def div(x, y):
-    """ Divide fractions correctly """
+    """Divide fractions correctly"""
     if x is None or y is None:
         return None
     return float(Decimal(str(x)) / Decimal(str(y)))
 
+
+def add(x, y):
+    """Subtract fractions correctly"""
+    if x is None or y is None:
+        return None
+    return float(Decimal(str(x)) + Decimal(str(y)))
+
+
+def sub(x, y):
+    """Subtract fractions correctly"""
+    if x is None or y is None:
+        return None
+    return float(Decimal(str(x)) - Decimal(str(y)))
+
+
 def to_step(value, step=1, side=False):
-    """ Change value step """
+    """Change value step"""
 
     if value is None:
         return None
