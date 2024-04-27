@@ -10,6 +10,7 @@ from libdev.num import (
     add_radix,
     to_step,
     add,
+    pretty,
 )
 
 
@@ -138,3 +139,19 @@ def test_to_step():
 
 def test_add():
     assert add(0.7, 0.2) == 0.9
+
+
+def test_pretty():
+    assert pretty(None) == None
+    assert pretty(0) == "0"
+    assert pretty(0.0) == "0"
+    assert pretty(0.0) == "0"
+    assert pretty(1.0) == "1"
+    assert pretty(0.1) == "0.1"
+    assert pretty(1.1, 2) == "1.1"
+    assert pretty(0.1, 2) == "0.1"
+    assert pretty(1.1, 0) == "1"
+    assert pretty(1.7, 0) == "2"
+    assert pretty(123.456, 1) == "123"
+    assert pretty(123.456, 1, True) == "+123"
+    assert pretty(12345.6, 3, True) == "+12’346"

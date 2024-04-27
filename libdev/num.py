@@ -115,6 +115,34 @@ def simplify_value(value, decimals=4):
     return sign + value
 
 
+def pretty(value, decimals=None, sign=False, symbol="’"):
+    """Decorate the number beautifully"""
+
+    if value is None:
+        return None
+
+    data = str(float(value))
+
+    if decimals is not None:
+        cur = len(data.split(".")[0])
+        data = str(round(value, max(0, decimals - cur)))
+
+    if data.split(".")[-1] == "0":
+        data = data.split(".")[0]
+
+    if data == "0":
+        return "0"
+
+    if symbol:
+        data = add_radix(data, symbol)
+
+    if sign:
+        if data[0] != "-":
+            data = "+" + data
+
+    return data
+
+
 def add_sign(value):
     """Add sign to a number"""
 
@@ -148,6 +176,9 @@ def add_radix(value, symbol="’"):
     if integer[0] == "-":
         sign = "-"
         integer = integer[1:]
+    # elif integer[0] == '+':
+    #     sign = '+'
+    #     integer = integer[1:]
     else:
         sign = ""
 
