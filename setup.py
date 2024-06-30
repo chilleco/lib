@@ -51,9 +51,9 @@ setup(
     python_requires=">=3.7, <4",
     install_requires=[
         "requests",  # Because of conflicts with main repo
-        "python-dotenv==1.0.0",
-        "boto3==1.28.46",
-        "Pillow==10.0.0",
+        "python-dotenv==1.0.1",
+        "boto3==1.34.136",
+        "Pillow==10.3.0",
     ],
     project_urls={
         "Source": "https://github.com/kosyachniy/lib",
