@@ -32,7 +32,7 @@ setup(
     long_description_content_type="text/markdown",
     url="https://github.com/kosyachniy/lib",
     author="Alexey Poloz",
-    author_email="polozhev@mail.ru",
+    author_email="alexypoloz@gmail.com",
     classifiers=[
         "Development Status :: 4 - Beta",
         "Environment :: Console",

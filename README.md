@@ -17,6 +17,6 @@ Transforms | ` libdev.gen ` | Code & token generators
 Fields | ` libdev.dev ` | Development tools
 &nbsp; | ` libdev.fin ` | Financial codes and tools
 &nbsp; | ` libdev.lang ` | Natural language formatters
-Files | ` libdev.doc ` | Documents handlers
+Files | ` libdev.doc ` | Base64 / JSON handlers
 &nbsp; | ` libdev.s3 ` | S3 file server functions
 &nbsp; | ` libdev.img ` | Image processing
