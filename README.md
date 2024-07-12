@@ -5,16 +5,18 @@ Development library — Set of standard functions for development
  | [PyPI](https://pypi.org/project/libdev/)
 
 ## Submodules
-Submodule | Description
----|---
-` libdev.cfg ` | Configuration getting
-` libdev.num ` | Numeric conversions & handlers
-` libdev.time ` | Time processing
-` libdev.lang ` | Natural language formatters
-` libdev.gen ` | Code & token generators
-` libdev.codes ` | Ciphers: langs & flags / networks / user statuses
-` libdev.dev ` | Development tools
-` libdev.fin ` | Financial codes and tools
-` libdev.check ` | Checking functions
-` libdev.doc ` | Documents handlers
-` libdev.s3 ` | S3 file server functions
+Stream | Submodule | Description
+---|---|---
+System | ` libdev.cfg ` | Configuration getting
+&nbsp; | ` libdev.req ` | AsyncIO requests (AIOHTTP wrapper)
+Data Format | ` libdev.num ` | Numeric conversions & handlers
+&nbsp; | ` libdev.time ` | Time processing
+Transforms | ` libdev.gen ` | Code & token generators
+&nbsp; | ` libdev.codes ` | Ciphers: langs & flags / networks / user statuses
+&nbsp; | ` libdev.check ` | Validation functions
+Fields | ` libdev.dev ` | Development tools
+&nbsp; | ` libdev.fin ` | Financial codes and tools
+&nbsp; | ` libdev.lang ` | Natural language formatters
+Files | ` libdev.doc ` | Documents handlers
+&nbsp; | ` libdev.s3 ` | S3 file server functions
+&nbsp; | ` libdev.img ` | Image processing

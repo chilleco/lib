@@ -7,7 +7,7 @@ from urllib.parse import urlparse
 from io import BytesIO
 from mimetypes import guess_extension
 
-import requests
+import aiohttp
 import boto3
 from botocore.exceptions import NoCredentialsError
 
@@ -15,6 +15,7 @@ from .cfg import cfg
 from .gen import generate
 
 
+# pylint: disable=invalid-name
 s3 = None
 if cfg("s3.pass"):
     s3 = boto3.client(
@@ -26,7 +27,23 @@ if cfg("s3.pass"):
     )
 
 
-def upload_file(
+async def fetch_file(url):
+    """
+    Fetch the content and content type of a URL.
+
+    Args:
+        url (str): The URL to fetch content from.
+
+    Returns:
+        tuple: The content of the response and its content type.
+    """
+    async with aiohttp.ClientSession() as session:
+        async with session.get(url, timeout=30) as response:
+            response.raise_for_status()
+            return await response.read(), response.headers.get("Content-Type")
+
+
+async def upload_file(
     file,
     directory=cfg("mode").lower(),
     bucket=cfg("project_name"),
@@ -39,15 +56,14 @@ def upload_file(
     if isinstance(file, str):
         parsed_url = urlparse(file)
         if parsed_url.netloc:
-            response = requests.get(file, timeout=30)
+            content, content_type = await fetch_file(file)
 
             if not file_type:
                 file_type = os.path.splitext(parsed_url.path)[-1]
             if not file_type:
-                content_type = response.headers.get("Content-Type")
                 file_type = guess_extension(content_type.split(";")[0])
 
-            file = BytesIO(response.content)
+            file = BytesIO(content)
             handler = s3.upload_fileobj
 
         else:

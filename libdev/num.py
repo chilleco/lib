@@ -124,11 +124,11 @@ def pretty(value, decimals=None, sign=False, symbol="’"):
     data = str(float(value))
 
     if decimals is not None:
-        cur = len(data.split(".")[0])
+        cur = len(data.split(".", maxsplit=1)[0])
         data = str(round(value, max(0, decimals - cur)))
 
-    if data.split(".")[-1] == "0":
-        data = data.split(".")[0]
+    if data.rsplit(".", maxsplit=1)[-1] == "0":
+        data = data.split(".", maxsplit=1)[0]
 
     if data == "0":
         return "0"

@@ -8,20 +8,20 @@ import json
 from dotenv import load_dotenv
 
 
-if os.path.isfile('sets.json'):
-    with open('sets.json', 'r', encoding='utf-8') as file:
+if os.path.isfile("sets.json"):
+    with open("sets.json", "r", encoding="utf-8") as file:
         sets = json.loads(file.read())
 else:
     sets = {}
 
-if os.path.isfile('.env'):
+if os.path.isfile(".env"):
     load_dotenv()
 
 
 def cfg(name, default=None):
-    """ Get config value by key """
+    """Get config value by key"""
 
-    keys = name.split('.')
+    keys = name.split(".")
     data = sets
 
     for key in keys:
@@ -31,7 +31,7 @@ def cfg(name, default=None):
     else:
         return data
 
-    name = name.replace('.', '_').upper()
+    name = name.replace(".", "_").upper()
     value = os.getenv(name, default)
 
     if value:
@@ -44,9 +44,9 @@ def cfg(name, default=None):
 
 
 def set_cfg(name, value):
-    """ Set config value """
+    """Set config value"""
 
-    array_name = name.split('.')
+    array_name = name.split(".")
     dictionary = {}
     tmp_dict = {}
 

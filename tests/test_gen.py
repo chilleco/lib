@@ -4,9 +4,11 @@ from libdev.gen import generate, generate_id, generate_password
 def test_generate():
     assert len(generate()) == 32
 
+
 def test_generate_id():
     assert 10000000 <= generate_id() <= 99999999
     assert 0 <= generate_id(1) <= 9
+
 
 def test_generate_password():
     assert len(generate_password()) == 8

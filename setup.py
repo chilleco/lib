@@ -50,8 +50,7 @@ setup(
     packages=find_packages(exclude=("tests",)),
     python_requires=">=3.7, <4",
     install_requires=[
-        "requests",  # Because of conflicts with main repo
-        "aiohttp",
+        "aiohttp",  # NOTE: Because of conflicts with main repo
         "python-dotenv==1.0.1",
         "boto3==1.34.136",
         "Pillow==10.3.0",

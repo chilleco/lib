@@ -1,3 +1,7 @@
+"""
+This module provides an asynchronous function to fetch data from a URL using aiohttp.
+"""
+
 import aiohttp
 
 
@@ -8,6 +12,23 @@ async def fetch(
     type_data="json",
     headers=None,
 ):
+    """
+    Fetch data from a URL using aiohttp.
+
+    Args:
+        url (str): The URL to fetch data from.
+        payload (dict, optional): The payload to send with the request.
+            Defaults to None.
+        type_req (str, optional): The type of request (e.g., 'post', 'put',
+            'delete', etc.). Defaults to 'post'.
+        type_data (str, optional): The type of data (e.g., 'json', 'data').
+            Defaults to 'json'.
+        headers (dict, optional): The headers to include with the request.
+            Defaults to None.
+
+    Returns:
+        tuple: A tuple containing the status code and the response data.
+    """
     if payload is None:
         payload = {}
 
@@ -34,7 +55,7 @@ async def fetch(
 
             try:
                 data = await response.json()
-            except:  # noqa: E722
+            except aiohttp.ContentTypeError:
                 data = await response.text()
 
             return code, data
