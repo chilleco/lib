@@ -1,5 +1,5 @@
 """
-This module provides an asynchronous function to fetch data from a URL using aiohttp.
+Provides an asynchronous function to fetch data from a URL using aiohttp
 """
 
 import aiohttp

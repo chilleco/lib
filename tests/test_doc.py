@@ -11,3 +11,5 @@ def test_to_base64():
 
 def test_to_json():
     assert to_json([{"хола": "☺️"}]) == '[\n	{\n		"хола": "☺️"\n	}\n]'
+    assert to_json(None) == "null"
+    assert to_json({1: 2}) == '{\n\t"1": 2\n}'

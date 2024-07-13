@@ -31,7 +31,7 @@ setup(
     long_description=long_description,
     long_description_content_type="text/markdown",
     url="https://github.com/kosyachniy/lib",
-    author="Alexey Poloz",
+    author="Alex Poloz",
     author_email="alexypoloz@gmail.com",
     classifiers=[
         "Development Status :: 4 - Beta",
@@ -50,10 +50,12 @@ setup(
     packages=find_packages(exclude=("tests",)),
     python_requires=">=3.7, <4",
     install_requires=[
-        "aiohttp",  # NOTE: Because of conflicts with main repo
+        # NOTE: Without lib versions because of conflicts with main repo
+        "aiohttp",
         "python-dotenv",
         "boto3",
         "Pillow",
+        "loguru",
     ],
     project_urls={
         "Source": "https://github.com/kosyachniy/lib",
