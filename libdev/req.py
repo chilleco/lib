@@ -11,6 +11,7 @@ async def fetch(
     type_req="post",
     type_data="json",
     headers=None,
+    timeout=None,
 ):
     """
     Fetch data from a URL using aiohttp.
@@ -25,6 +26,8 @@ async def fetch(
             Defaults to 'json'.
         headers (dict, optional): The headers to include with the request.
             Defaults to None.
+        timeout (float, optional): The timeout for the request in seconds.
+            Defaults to None.
 
     Returns:
         tuple: A tuple containing the status code and the response data.
@@ -32,7 +35,9 @@ async def fetch(
     if payload is None:
         payload = {}
 
-    async with aiohttp.ClientSession() as session:
+    async with aiohttp.ClientSession(
+        timeout=timeout and aiohttp.ClientTimeout(total=timeout),
+    ) as session:
         if type_req == "post":
             req = session.post
         elif type_req == "put":

@@ -1,7 +1,7 @@
 # LibDev
 Development library — Set of standard functions for development
 
-[GitHub](https://github.com/kosyachniy/lib)
+[GitHub](https://github.com/chilleco/lib)
  | [PyPI](https://pypi.org/project/libdev/)
 
 ## Submodules

@@ -30,7 +30,7 @@ setup(
     description="Set of standard functions for development",
     long_description=long_description,
     long_description_content_type="text/markdown",
-    url="https://github.com/kosyachniy/lib",
+    url="https://github.com/chilleco/lib",
     author="Alex Poloz",
     author_email="alexypoloz@gmail.com",
     classifiers=[
@@ -58,7 +58,7 @@ setup(
         "loguru",
     ],
     project_urls={
-        "Source": "https://github.com/kosyachniy/lib",
+        "Source": "https://github.com/chilleco/lib",
     },
     license="MIT",
     include_package_data=False,
