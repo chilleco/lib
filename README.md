@@ -15,6 +15,7 @@ Data Format | ` libdev.num ` | Numeric conversions & handlers
 Transforms | ` libdev.gen ` | Code & token generators
 &nbsp; | ` libdev.codes ` | Ciphers: langs & flags / networks / user statuses
 &nbsp; | ` libdev.check ` | Validation functions
+&nbsp; | ` libdev.crypt ` | Encryption and decryption functions
 Fields | ` libdev.dev ` | Development tools
 &nbsp; | ` libdev.fin ` | Financial codes and tools
 &nbsp; | ` libdev.lang ` | Natural language formatters
