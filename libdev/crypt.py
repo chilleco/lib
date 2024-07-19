@@ -78,7 +78,8 @@ def encrypt(number, length=5):
     encoded_str = _int_to_custom_base(number)
     # Calculate checksum and append to the end
     checksum = _get_checksum(encoded_str)
-    encoded_str += checksum
+    if encoded_str != checksum:
+        encoded_str += checksum
     # Add random characters to the beginning to meet the desired length
     while len(encoded_str) < length:
         random_char = random.choice(ALPHABET)
@@ -108,4 +109,4 @@ def decrypt(encoded_str):
         candidate = encoded_str[i:]
         if _get_checksum(candidate) == checksum:
             return _custom_base_to_int(candidate)
-    raise ValueError("Invalid encoded string")
+    return _custom_base_to_int(checksum)

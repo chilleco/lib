@@ -4,7 +4,14 @@ https://www.epochconverter.com/
 
 import datetime
 
-from libdev.time import get_time, decode_time, parse_time, format_delta
+from libdev.time import (
+    get_time,
+    get_date,
+    decode_time,
+    decode_date,
+    parse_time,
+    format_delta,
+)
 
 
 def test_get_time():
@@ -22,11 +29,19 @@ def test_get_time():
     )
 
 
+def test_get_date():
+    assert get_date(1641061152.4) == "01.01.2022"
+
+
 def test_decode_time():
     assert decode_time("") == None
     assert decode_time("01.01.2022 21:19:12", tz=3) == 1641061152
     assert decode_time("01.01.2022 18:19:12") == 1641061152
     assert decode_time("2024-10-07", "%Y-%m-%d", 4) == 1728244800
+
+
+def test_decode_date():
+    assert decode_date("01.01.2022", tz=3) == 1640984400
 
 
 def test_parse_time():

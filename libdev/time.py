@@ -54,6 +54,11 @@ def get_time(data=None, template="%d.%m.%Y %H:%M:%S", tz=0):
     return time.strftime(template, time.gmtime(data + tz * 3600))
 
 
+def get_date(data=None, template="%d.%m.%Y", tz=0):
+    """Get date from timestamp"""
+    return get_time(data, template, tz)
+
+
 def decode_time(data=None, template="%d.%m.%Y %H:%M:%S", tz=0):
     """Get timestamp from time"""
 
@@ -70,6 +75,11 @@ def decode_time(data=None, template="%d.%m.%Y %H:%M:%S", tz=0):
     data = data.replace(tzinfo=datetime.timezone(datetime.timedelta(hours=tz)))
 
     return int(data.timestamp())
+
+
+def decode_date(data=None, template="%d.%m.%Y", tz=0):
+    """Get timestamp from date"""
+    return decode_time(data, template, tz)
 
 
 # pylint: disable=too-many-branches,too-many-statements
