@@ -11,6 +11,10 @@ from libdev.time import (
     decode_date,
     parse_time,
     format_delta,
+    get_midnight,
+    get_month_start,
+    get_next_day,
+    get_next_month,
 )
 
 
@@ -103,3 +107,24 @@ def test_format_delta_short():
     assert format_delta(181, short=True, locale="ru") == "3мин"
     assert format_delta(18000, short=True, locale="ru") == "5ч"
     assert format_delta(1814400, short=True, locale="ru") == "21д"
+
+
+def test_get_midnight():
+    assert get_midnight(1721597607.049283) == 1721520000
+    assert get_midnight(1721597607, tz=3) == 1721595600
+    assert get_midnight(1704056399, tz=3) == 1703970000
+
+
+def test_get_month_start():
+    assert get_month_start(1704060061.049283) == 1701388800
+    assert get_month_start(1704060061, tz=3) == 1704056400
+
+
+def test_get_next_day():
+    assert get_next_day(1704060061) == 1704067200
+    assert get_next_day(1704060061, tz=3) == 1704142800
+
+
+def test_get_next_month():
+    assert get_next_month(1703980800) == 1704067200
+    assert get_next_month(1703970000, tz=3) == 1704056400

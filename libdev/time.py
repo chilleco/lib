@@ -38,6 +38,19 @@ DAYS_OF_WEEK = (
 )
 
 
+def to_tz(hours):
+    """
+    Create a timezone object with the specified offset in hours.
+
+    Args:
+        hours (int): The timezone offset in hours (e.g., 3 for UTC+3 or -5 for UTC-5).
+
+    Returns:
+        datetime.timezone: A timezone object with the specified offset.
+    """
+    return datetime.timezone(datetime.timedelta(hours=hours))
+
+
 def get_time(data=None, template="%d.%m.%Y %H:%M:%S", tz=0):
     """Get time from timestamp"""
 
@@ -249,3 +262,99 @@ def format_delta(sec, short=False, locale="en"):
                     delta += " seconds"
 
     return delta
+
+
+def get_midnight(timestamp=None, tz=0):
+    """
+    Get the start of the day (midnight) for a given timestamp in a specified timezone.
+
+    Args:
+        timestamp (float): The original timestamp (in seconds since epoch).
+        tz_offset_hours (int): The timezone offset in hours (e.g., 3 for UTC+3).
+
+    Returns:
+        float: The timestamp for the start of the day (midnight) in the specified timezone.
+    """
+    if timestamp is None:
+        timestamp = time.time()
+    dt_local = datetime.datetime.fromtimestamp(timestamp, tz=to_tz(tz))
+    start_day = dt_local.replace(hour=0, minute=0, second=0, microsecond=0)
+    return int(start_day.timestamp())
+
+
+def get_month_start(timestamp=None, tz=0):
+    """
+    Get the start of the month (midnight on the first day of the month) for a given timestamp in a specified timezone.
+
+    Args:
+        timestamp (float): The original timestamp (in seconds since epoch). Defaults to the current time if None.
+        tz (int): The timezone offset in hours (e.g., 3 for UTC+3).
+
+    Returns:
+        float: The timestamp for the start of the month in the specified timezone.
+    """
+    if timestamp is None:
+        timestamp = time.time()
+    dt_local = datetime.datetime.fromtimestamp(timestamp, tz=to_tz(tz))
+    start_month = dt_local.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+    return int(start_month.timestamp())
+
+
+def get_next_day(timestamp=None, tz=0):
+    """
+    Get the start of the next day (midnight) for a given timestamp in a specified timezone.
+
+    Args:
+        timestamp (float): The original timestamp (in seconds since epoch). Defaults to the current time if None.
+        tz (int): The timezone offset in hours (e.g., 3 for UTC+3).
+
+    Returns:
+        float: The timestamp for the start of the next day (midnight) in the specified timezone.
+    """
+    if timestamp is None:
+        timestamp = time.time()
+    dt_local = datetime.datetime.fromtimestamp(timestamp, tz=to_tz(tz))
+    next_day = (dt_local + datetime.timedelta(days=1)).replace(
+        hour=0, minute=0, second=0, microsecond=0
+    )
+    return int(next_day.timestamp())
+
+
+def get_next_month(timestamp=None, tz=0):
+    """
+    Get the start of the next month (midnight on the first day of the next month) for a given timestamp in a specified timezone.
+
+    Args:
+        timestamp (float): The original timestamp (in seconds since epoch). Defaults to the current time if None.
+        tz (int): The timezone offset in hours (e.g., 3 for UTC+3).
+
+    Returns:
+        float: The timestamp for the start of the next month in the specified timezone.
+    """
+
+    if timestamp is None:
+        timestamp = time.time()
+
+    dt_local = datetime.datetime.fromtimestamp(timestamp, tz=to_tz(tz))
+
+    if dt_local.month == 12:
+        next_month = dt_local.replace(
+            year=dt_local.year + 1,
+            month=1,
+            day=1,
+            hour=0,
+            minute=0,
+            second=0,
+            microsecond=0,
+        )
+    else:
+        next_month = dt_local.replace(
+            month=dt_local.month + 1,
+            day=1,
+            hour=0,
+            minute=0,
+            second=0,
+            microsecond=0,
+        )
+
+    return int(next_month.timestamp())
