@@ -61,6 +61,9 @@ async def fetch(
             try:
                 data = await response.json()
             except aiohttp.ContentTypeError:
-                data = await response.text()
+                try:
+                    data = await response.text()
+                except UnicodeDecodeError:
+                    data = await response.read()
 
             return code, data
