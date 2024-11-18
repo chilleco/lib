@@ -320,6 +320,7 @@ def get_next_day(timestamp=None, tz=0):
     return int(next_day.timestamp())
 
 
+# TODO: get previous month (params=-1 +1)
 def get_next_month(timestamp=None, tz=0):
     """
     Get the start of the next month (midnight on the first day of the next month) for a given timestamp in a specified timezone.

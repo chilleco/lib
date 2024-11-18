@@ -4,6 +4,7 @@ Checking functionality
 
 import re
 from typing import Union
+from urllib.parse import urlparse
 
 
 PATTERN_PHONE = r"\(?\+?[0-9\s\-\(\)./]{7,30}"
@@ -171,6 +172,28 @@ def check_url(data: str) -> bool:
         )
         is not None
     )
+
+
+def get_base_url(data: str, protocol: bool = False) -> str | None:
+    """Get domain"""
+
+    if not data or "." not in data:
+        return None
+    data = data.strip().split()[0]
+
+    if "://" not in data:
+        data = "http://" + data
+
+    parsed = urlparse(data)
+    if not parsed.netloc:
+        return None
+
+    if protocol:
+        base_url = f"{parsed.scheme}://{parsed.netloc}"
+    else:
+        base_url = parsed.netloc
+
+    return base_url
 
 
 def get_last_url(data: str) -> str:

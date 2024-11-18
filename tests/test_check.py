@@ -6,6 +6,7 @@ from libdev.check import (
     check_mail,
     fake_mail,
     check_url,
+    get_base_url,
     get_last_url,
 )
 
@@ -91,6 +92,40 @@ def test_check_url():
     assert check_url("http://a.bc") == True
     assert check_url("https://chill.services/") == True
     assert check_url("https://t.me/kosyachniy") == True
+    assert check_url("http2://www.asd.atcsd.ru\nhttp://www.asd.atcsd.ru/") == False
+
+
+def test_get_base_url():
+    assert get_base_url(None) == None
+    assert get_base_url("") == None
+    assert get_base_url("http") == None
+    assert get_base_url("http://") == None
+    assert get_base_url("http://a/") == None
+    assert get_base_url("http://a.b") == "a.b"
+    assert get_base_url("http://a.bc", protocol=True) == "http://a.bc"
+    assert (
+        get_base_url("https://chill.services/", protocol=True)
+        == "https://chill.services"
+    )
+    assert get_base_url("https://t.me/kosyachniy", protocol=True) == "https://t.me"
+    assert (
+        get_base_url("http://www.atcsd.ru\nhttp://www.asd.atcsd.ru/", protocol=True)
+        == "http://www.atcsd.ru"
+    )
+    assert (
+        get_base_url(
+            "http2://www.asd.atcsd.ru\nhttp://www.asd.atcsd.ru/", protocol=True
+        )
+        == "http2://www.asd.atcsd.ru"
+    )
+    assert (
+        get_base_url("https2://127.0.0.1:8080?query=string#fragment", protocol=True)
+        == "https2://127.0.0.1:8080"
+    )
+    assert (
+        get_base_url("127.0.0.1:8080/path/to/page?query=string#fragment", protocol=True)
+        == "http://127.0.0.1:8080"
+    )
 
 
 def test_get_last_url():
