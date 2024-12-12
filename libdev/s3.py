@@ -99,7 +99,7 @@ async def upload(
 
 
 def get(
-    directory=cfg("mode"),
+    directory=cfg("mode").lower(),
     bucket=cfg("project_name"),
 ):
     """List all files in a specified directory (prefix) in S3"""

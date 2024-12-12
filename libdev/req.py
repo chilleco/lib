@@ -8,6 +8,7 @@ import aiohttp
 async def fetch(
     url,
     payload=None,
+    files=None,
     type_req="post",
     type_data="json",
     headers=None,
@@ -35,8 +36,15 @@ async def fetch(
     if payload is None:
         payload = {}
 
+    if files is not None:
+        form = aiohttp.FormData()
+        for name, fdata in files.items():
+            form.add_field(name, fdata)
+        payload = form
+        type_data = "data"
+
     async with aiohttp.ClientSession(
-        timeout=timeout and aiohttp.ClientTimeout(total=timeout),
+        timeout=aiohttp.ClientTimeout(total=timeout),
     ) as session:
         if type_req == "post":
             req = session.post
