@@ -181,8 +181,14 @@ def get_base_url(data: str, protocol: bool = False) -> str | None:
         return None
     data = data.strip().split()[0]
 
-    if "://" not in data:
-        data = "http://" + data
+    if data[:4] != "http":
+        if data[:3] != "://":
+            if data[:1] != "/":
+                data = "http://" + data
+            else:
+                data = "http:/" + data
+        else:
+            data = "http" + data
 
     parsed = urlparse(data)
     if not parsed.netloc:
@@ -201,3 +207,32 @@ def get_last_url(data: str) -> str:
     if data is None:
         return None
     return re.sub(r".*/(.+?)/?$", r"\1", data)
+
+
+def get_url(data: str) -> str | None:
+    """Format link"""
+
+    if not data or "." not in data:
+        return None
+    data = data.strip().split()[0]
+
+    if data[:4] != "http":
+        if data[:3] != "://":
+            if data[:1] != "/":
+                data = "http://" + data
+            else:
+                data = "http:/" + data
+        else:
+            data = "http" + data
+
+    parsed = urlparse(data)
+    if not parsed.netloc:
+        return None
+
+    base_url = f"{parsed.scheme}://{parsed.netloc}{parsed.path or ''}"
+    if parsed.query:
+        base_url += f"?{parsed.query}"
+    if parsed.fragment:
+        base_url += f"#{parsed.fragment}"
+
+    return base_url

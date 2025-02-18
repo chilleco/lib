@@ -8,6 +8,7 @@ from libdev.check import (
     check_url,
     get_base_url,
     get_last_url,
+    get_url,
 )
 
 
@@ -126,6 +127,15 @@ def test_get_base_url():
         get_base_url("127.0.0.1:8080/path/to/page?query=string#fragment", protocol=True)
         == "http://127.0.0.1:8080"
     )
+    assert (
+        get_base_url("http://kovalchuktn.ru\nhttps/eamazurova.ru") == "kovalchuktn.ru"
+    )
+    # assert (
+    #     get_base_url(
+    #         "http://kovalchuktn.ruhttps/eamazurova.ruhttps:/medpharmcenter.ruhttps:/mf-rf.ruhttps:/redtambourine.ruhttps:/veritoria.ruhttps:/yugsw.ruhttp:/tkachenkomv.ru"
+    #     )
+    #     == "kovalchuktn.ru"
+    # )
 
 
 def test_get_last_url():
@@ -139,3 +149,16 @@ def test_get_last_url():
     assert get_last_url("vk.com/alexeypoloz") == "alexeypoloz"
     assert get_last_url("/alexeypoloz") == "alexeypoloz"
     assert get_last_url("alexeypoloz") == "alexeypoloz"
+
+
+def test_get_url():
+    assert get_url(None) == None
+    assert get_url("") == None
+    assert get_url("https://vk.com/alexeypoloz/") == "https://vk.com/alexeypoloz/"
+    assert get_url("://vk.com/alexeypoloz") == "http://vk.com/alexeypoloz"
+    assert (
+        get_url("127.0.0.1:8080/path/to/page?query=string#fragment")
+        == "http://127.0.0.1:8080/path/to/page?query=string#fragment"
+    )
+    assert get_url("/vk.com/alexeypoloz") == "http://vk.com/alexeypoloz"
+    assert get_url("www.vk.com/alexeypoloz") == "http://www.vk.com/alexeypoloz"
