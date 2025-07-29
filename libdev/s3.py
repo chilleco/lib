@@ -23,7 +23,7 @@ if cfg("s3.pass"):
         endpoint_url=cfg("s3.host"),
         aws_access_key_id=cfg("s3.user"),
         aws_secret_access_key=cfg("s3.pass"),
-        region_name="us-east-1",
+        region_name=cfg("s3.region") or "us-east-1",
     )
 
 

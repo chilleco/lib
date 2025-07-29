@@ -12,7 +12,7 @@ PATTERN_PHONE = r"\(?\+?[0-9\s\-\(\)./]{7,30}"
 
 def check_phone(value: Union[str, int]) -> bool:
     """Check phone validity"""
-    if isinstance(value, int):
+    if not isinstance(value, str):
         value = str(value)
     return re.match(PATTERN_PHONE, value) is not None
 
@@ -236,3 +236,7 @@ def get_url(data: str) -> str | None:
         base_url += f"#{parsed.fragment}"
 
     return base_url
+
+
+def clear_text(data, extra=".,"):
+    return re.sub(rf"[^\w {extra}]", "", data).strip()
