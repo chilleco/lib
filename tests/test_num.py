@@ -11,6 +11,7 @@ from libdev.num import (
     to_step,
     add,
     pretty,
+    compress_zeros,
 )
 
 
@@ -155,3 +156,18 @@ def test_pretty():
     assert pretty(123.456, 1) == "123"
     assert pretty(123.456, 1, True) == "+123"
     assert pretty(12345.6, 3, True) == "+12’346"
+
+
+def test_compress_zeros():
+    assert compress_zeros(None) == None
+    assert compress_zeros(0) == "0"
+    assert compress_zeros(0.0) == "0.0"
+    assert compress_zeros(1) == "1"
+    assert compress_zeros(1.0) == "1.0"
+    assert compress_zeros(1.0, round=0) == "1.0"
+    assert compress_zeros(0.00012) == "0.0₃12"
+    assert compress_zeros(0.00012, round=2) == "0.0₃12"
+    assert compress_zeros(0.0123) == "0.0123"
+    assert compress_zeros(0.0123456, round=3) == "0.0123"
+    assert compress_zeros(1.000045) == "1.0₄45"
+    assert compress_zeros(-0.0010959999999999997522, round=3) == "-0.0₂11"
