@@ -300,6 +300,27 @@ def get_month_start(timestamp=None, tz=0):
     return int(start_month.timestamp())
 
 
+def get_week_start(timestamp=None, tz=0):
+    """
+    Get the start of the week (midnight on Monday) for a given timestamp in a specified timezone.
+
+    Args:
+        timestamp (float): The original timestamp (in seconds since epoch). Defaults to the current time if None.
+        tz (int): The timezone offset in hours (e.g., 3 for UTC+3).
+
+    Returns:
+        float: The timestamp for the start of the week (Monday at midnight) in the specified timezone.
+    """
+    if timestamp is None:
+        timestamp = time.time()
+    dt_local = datetime.datetime.fromtimestamp(timestamp, tz=to_tz(tz))
+    # Calculate days to subtract to get to Monday (weekday() returns 0 for Monday, 6 for Sunday)
+    days_since_monday = dt_local.weekday()
+    start_week = dt_local - datetime.timedelta(days=days_since_monday)
+    start_week = start_week.replace(hour=0, minute=0, second=0, microsecond=0)
+    return int(start_week.timestamp())
+
+
 def get_next_day(timestamp=None, tz=0):
     """
     Get the start of the next day (midnight) for a given timestamp in a specified timezone.

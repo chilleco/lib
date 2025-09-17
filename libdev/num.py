@@ -258,73 +258,73 @@ def to_step(value, step=1, side=False):
     return value
 
 
-def _to_subscript(n: int) -> str:
-    """Convert an integer n to a string of subscript digits."""
-    return "".join(_SUBSCRIPTS[d] for d in str(n))
+from decimal import Decimal
+
+_SUB = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
 
 
-def compress_zeros(x: int | float, round: int | None = None) -> str | None:
+def _to_plain(d: Decimal) -> str:
+    """Плейн-строка без экспоненты и без хвостовых нулей."""
+    sign, digits, exp = d.as_tuple()
+    ds = "".join(map(str, digits)) or "0"
+    if exp >= 0:
+        int_part = ds + "0" * exp
+        frac = ""
+    else:
+        split = len(ds) + exp
+        if split > 0:
+            int_part, frac = ds[:split], ds[split:]
+        else:
+            int_part, frac = "0", "0" * (-split) + ds
+    int_part = int_part.lstrip("0") or "0"
+    frac = frac.rstrip("0")
+    return f"{int_part}.{frac}" if frac else int_part
+
+
+def compress_zeros(x, round=None) -> str:
     """
-    Given a float or decimal‐string x, return a string where
-    runs of leading zeros in the fraction are shown as:
-      one '0' plus a subscript count of the zeros.
-    If `round` is provided, the remaining digits after the zeros
-    are rounded to that many places.
-
-    Examples:
-      compress_zeros(0.00012)           -> '0.0₃12'
-      compress_zeros(0.00012, round=2)  -> '0.0₃12'
-      compress_zeros(0.0123)            -> '0.0123'  (only one leading zero, so unchanged)
-      compress_zeros(0.0123456, round=3)-> '0.0123'
-      compress_zeros(1.000045)          -> '1.0₄45'
-      compress_zeros(-0.0010959999999999997522, round=3)
-                                        -> '-0.0₂11'
+    0.000012 -> '0.0₄12'
+    round: кол-во цифр после блока нулей (округляет).
     """
 
     if x is None:
         return None
 
-    dec_x = Decimal(str(x))
-    s = format(dec_x, "f")
+    d = Decimal(str(x))
+    if d == 0:
+        return "0"
+    s_abs = _to_plain(abs(d))
 
-    # no fractional part
-    if "." not in s:
-        return s
+    # если нужна точность "после нулей" — сначала считаем длину нулей
+    if round is not None and "." in s_abs:
+        frac0 = s_abs.split(".", 1)[1]
+        k0 = 0
+        for c in frac0:
+            if c == "0":
+                k0 += 1
+            else:
+                break
+        total_places = k0 + int(round)
+        if total_places > 0:
+            d = abs(d).quantize(Decimal(1).scaleb(-total_places))
+        else:
+            d = abs(d)  # нечего округлять
+        s_abs = _to_plain(d)
 
-    int_part, frac = s.split(".", 1)
+    # сжатие
+    if "." not in s_abs:
+        out = s_abs
+    else:
+        int_part, frac = s_abs.split(".", 1)
+        k = 0
+        for c in frac:
+            if c == "0":
+                k += 1
+            else:
+                break
+        if k >= 2:
+            out = f"{int_part}.0{str(k).translate(_SUB)}{frac[k:]}"
+        else:
+            out = s_abs
 
-    # count leading zeros in the fractional part
-    zero_run = len(frac) - len(frac.lstrip("0"))
-
-    # If rounding is requested, do it first
-    if round is not None:
-        # ensure at least one zero is counted for quantization
-        places = max(zero_run, 1) + round
-        quant = Decimal(f"1e-{places}")
-        dec_q = dec_x.quantize(quant, rounding=ROUND_HALF_UP)
-        s_q = format(dec_q, "f")
-
-        # if rounding eliminated fractional part
-        if "." not in s_q:
-            return s_q
-
-        int_part_q, frac_q = s_q.split(".", 1)
-        # for zero_run == 0 or 1, we just return the rounded string
-        if zero_run <= 1:
-            return s_q
-
-        # strip any trailing zeros, then compress
-        frac_q = frac_q.rstrip("0")
-        if not frac_q:
-            return int_part_q
-        tail = frac_q[zero_run:]
-        return f"{int_part_q}.0{_to_subscript(zero_run)}{tail}"
-
-    # No rounding: only compress if more than one leading zero
-    if zero_run <= 1:
-        return s
-
-    tail = frac[zero_run:]
-
-    # build compressed form
-    return f"{int_part}.0{_to_subscript(zero_run)}{tail}"
+    return f"-{out}" if x and Decimal(str(x)) < 0 else out
