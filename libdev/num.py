@@ -4,21 +4,10 @@ Numbers functionality
 
 import re
 import math
-from decimal import Decimal, ROUND_HALF_UP
+from decimal import Decimal, InvalidOperation
 
 
-_SUBSCRIPTS = {
-    "0": "₀",
-    "1": "₁",
-    "2": "₂",
-    "3": "₃",
-    "4": "₄",
-    "5": "₅",
-    "6": "₆",
-    "7": "₇",
-    "8": "₈",
-    "9": "₉",
-}
+_SUBSCRIPTS = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
 
 
 def is_float(value: str) -> bool:
@@ -129,23 +118,57 @@ def simplify_value(value, decimals=4):
     return sign + value
 
 
-def pretty(value, decimals=None, sign=False, symbol="’"):
+def pretty(
+    value,
+    decimals=None,
+    sign=False,
+    symbol="’",
+    zeros=4,
+    compress=None,
+):
     """Decorate the number beautifully"""
 
     if value is None:
         return None
 
-    data = str(float(value))
-
+    # Handle decimals parameter first (takes precedence)
     if decimals is not None:
-        cur = len(data.split(".", maxsplit=1)[0])
-        data = str(round(value, max(0, decimals - cur)))
+        # Use the original decimals logic for backward compatibility
+        s = to_plain(abs(value))
+        if "." in s:
+            int_part = s.split(".", 1)[0]
+            cur = len(int_part)
+            target_decimals = max(0, decimals - cur)
+            # Apply rounding first
+            rounded_value = round(float(value), target_decimals)
+            # If target_decimals is 0, convert to int for proper formatting
+            if target_decimals == 0:
+                rounded_value = int(rounded_value)
+            # Then use compress_zeros without round parameter
+            data = compress_zeros(rounded_value, zeros=zeros)
+        else:
+            data = compress_zeros(value, zeros=zeros)
+    elif zeros is None and compress is None:
+        # No compression or special formatting requested, use plain representation
+        data = to_plain(value)
+    else:
+        # Use compress_zeros with specified parameters
+        compress_zeros_args = {}
 
-    if data.rsplit(".", maxsplit=1)[-1] == "0":
-        data = data.split(".", maxsplit=1)[0]
+        if zeros is not None:
+            compress_zeros_args["zeros"] = zeros
+
+        if compress is not None:
+            compress_zeros_args["round"] = compress
+
+        data = compress_zeros(value, **compress_zeros_args)
 
     if data == "0":
         return "0"
+
+    # Remove trailing zeros after decimal point for cleaner formatting
+    if "." in data and data.rsplit(".", maxsplit=1)[-1] == "0":
+        data = data.split(".", maxsplit=1)[0]
 
     if symbol:
         data = add_radix(data, symbol)
@@ -258,73 +281,157 @@ def to_step(value, step=1, side=False):
     return value
 
 
-from decimal import Decimal
-
-_SUB = str.maketrans("0123456789", "₀₁₂₃₄₅₆₇₈₉")
-
-
-def _to_plain(d: Decimal) -> str:
-    """Плейн-строка без экспоненты и без хвостовых нулей."""
-    sign, digits, exp = d.as_tuple()
-    ds = "".join(map(str, digits)) or "0"
-    if exp >= 0:
-        int_part = ds + "0" * exp
-        frac = ""
-    else:
-        split = len(ds) + exp
-        if split > 0:
-            int_part, frac = ds[:split], ds[split:]
+def to_plain(value) -> str:
+    if value is None:
+        return None
+    try:
+        if isinstance(value, str):
+            d = Decimal(value)
+        elif isinstance(value, float):
+            d = Decimal(str(value))
         else:
-            int_part, frac = "0", "0" * (-split) + ds
-    int_part = int_part.lstrip("0") or "0"
-    frac = frac.rstrip("0")
-    return f"{int_part}.{frac}" if frac else int_part
+            d = Decimal(value)
+
+        s = format(d.normalize(), "f")
+
+        if "." in s:
+            s = s.rstrip("0").rstrip(".")
+        if s == "-0":
+            s = "0"
+        return s
+    except (InvalidOperation, ValueError, TypeError):
+        return str(value)
 
 
-def compress_zeros(x, round=None) -> str:
+def _round_to_decimals(x, decimals):
+    """Helper function to round to specified decimal places"""
+    if decimals <= 0:
+        return float(int(x))
+    return round(float(x), decimals)
+
+
+def compress_zeros(x, zeros=2, round=None) -> str:
     """
     0.000012 -> '0.0₄12'
-    round: кол-во цифр после блока нулей (округляет).
+    1.000045 -> '1.0₄45'
+    round: number of digits after the zero block (rounds).
+    zeros: minimum count of consecutive zeros to compress (default: 2).
     """
 
     if x is None:
         return None
 
-    d = Decimal(str(x))
-    if d == 0:
-        return "0"
-    s_abs = _to_plain(abs(d))
-
-    # если нужна точность "после нулей" — сначала считаем длину нулей
-    if round is not None and "." in s_abs:
-        frac0 = s_abs.split(".", 1)[1]
-        k0 = 0
-        for c in frac0:
-            if c == "0":
-                k0 += 1
+    # Store original string representation for rounding calculations
+    original_str = None
+    if isinstance(x, str):
+        original_str = x.strip()
+        x = original_str
+        # Remove trailing zeros from string
+        if "." in x:
+            x = x.rstrip("0").rstrip(".")
+        # Convert to appropriate numeric type
+        try:
+            if "." in x:
+                x = float(x)
             else:
-                break
-        total_places = k0 + int(round)
-        if total_places > 0:
-            d = abs(d).quantize(Decimal(1).scaleb(-total_places))
-        else:
-            d = abs(d)  # нечего округлять
-        s_abs = _to_plain(d)
+                x = int(x)
+        except ValueError:
+            return str(x)
 
-    # сжатие
-    if "." not in s_abs:
-        out = s_abs
+    # Determine if original was float or int to preserve format
+    is_float_type = isinstance(x, float) or (isinstance(x, str) and "." in str(x))
+
+    # Handle rounding if specified
+    if round is not None:
+        # For rounding, use original string if available, otherwise convert to plain string
+        if original_str and "." in original_str:
+            s = original_str.lstrip("-")
+        else:
+            # Use to_plain to avoid scientific notation
+            s = to_plain(abs(x))
+
+        if "." in s:
+            int_part, frac_part = s.split(".")
+            # Count leading zeros in fractional part
+            leading_zeros = 0
+            for c in frac_part:
+                if c == "0":
+                    leading_zeros += 1
+                else:
+                    break
+
+            # Count trailing zeros in fractional part
+            trailing_zeros = 0
+            for c in reversed(frac_part):
+                if c == "0":
+                    trailing_zeros += 1
+                else:
+                    break
+
+            # Apply rounding logic
+            if leading_zeros > 0:
+                # If there are leading zeros, round after them (regardless of compression)
+                total_decimals = leading_zeros + round
+                x = _round_to_decimals(x, total_decimals)
+            else:
+                # No leading zeros, apply normal rounding
+                x = _round_to_decimals(x, round)
+
+    # Convert to string representation
+    if isinstance(x, int) and not is_float_type:
+        s = str(x)
     else:
-        int_part, frac = s_abs.split(".", 1)
-        k = 0
-        for c in frac:
+        # For floats, use format that preserves trailing decimals when needed
+        if x == int(x) and is_float_type:
+            s = f"{int(x)}.0"
+        else:
+            s = str(float(x))
+            # Remove scientific notation if present
+            if "e" in s.lower():
+                s = f"{float(x):.15f}".rstrip("0")
+                if s.endswith("."):
+                    s += "0"
+
+    # Handle negative sign
+    negative = s.startswith("-")
+    if negative:
+        s = s[1:]
+
+    # Process compression
+    if "." not in s:
+        result = s
+    else:
+        int_part, frac_part = s.split(".")
+
+        # Compress leading zeros in fractional part
+        leading_zeros = 0
+        for c in frac_part:
             if c == "0":
-                k += 1
+                leading_zeros += 1
             else:
                 break
-        if k >= 2:
-            out = f"{int_part}.0{str(k).translate(_SUB)}{frac[k:]}"
-        else:
-            out = s_abs
 
-    return f"-{out}" if x and Decimal(str(x)) < 0 else out
+        # Compress trailing zeros in fractional part
+        trailing_zeros = 0
+        for c in reversed(frac_part):
+            if c == "0":
+                trailing_zeros += 1
+            else:
+                break
+
+        # Apply compression
+        if leading_zeros >= zeros:
+            # Compress leading zeros
+            remaining_frac = frac_part[leading_zeros:]
+            result = f"{int_part}.0{str(leading_zeros).translate(_SUBSCRIPTS)}{remaining_frac}"
+        elif trailing_zeros >= zeros and leading_zeros == 0:
+            # Compress trailing zeros (but not if there are leading zeros)
+            remaining_frac = frac_part[:-trailing_zeros]
+            if remaining_frac:
+                result = f"{int_part}.{remaining_frac}0{str(trailing_zeros).translate(_SUBSCRIPTS)}"
+            else:
+                result = f"{int_part}.0{str(trailing_zeros).translate(_SUBSCRIPTS)}"
+        else:
+            result = s
+
+    return f"-{result}" if negative else result

@@ -11,6 +11,7 @@ from libdev.num import (
     to_step,
     add,
     pretty,
+    to_plain,
     compress_zeros,
 )
 
@@ -156,18 +157,93 @@ def test_pretty():
     assert pretty(123.456, 1) == "123"
     assert pretty(123.456, 1, True) == "+123"
     assert pretty(12345.6, 3, True) == "+12’346"
+    assert pretty(-0.000000235235, zeros=None, compress=None) == "-0.000000235235"
+    assert pretty(-0.000000235235, zeros=4, compress=2) == "-0.0₆24"
+
+
+def test_to_plain():
+    assert to_plain(None) == None
+    assert to_plain(0) == "0"
+    # assert to_plain(0.0) == "0.0"
+    # assert to_plain(1.0) == "1.0"
+    assert to_plain(1.1) == "1.1"
+    assert to_plain(0.000000235235) == "0.000000235235"
+    assert to_plain(-0.000000235235) == "-0.000000235235"
+    assert to_plain("0.000000235235") == "0.000000235235"
+    assert to_plain(2.35235e-07) == "0.000000235235"
+    assert to_plain("1e-12") == "0.000000000001"
+    assert to_plain("123.4500") == "123.45"
+
+
+def test_pretty_with_compression():
+    # Test pretty function with compression parameters
+
+    # Test zeros parameter (minimum zeros to compress)
+    assert pretty(0.00012, zeros=2) == "0.0₃12"  # Default behavior, compress >=2 zeros
+    assert pretty(0.01, zeros=1) == "0.0₁1"  # Compress single zero with zeros=1
+    assert pretty(0.01, zeros=3) == "0.01"  # Don't compress with zeros=3 (only 1 zero)
+    assert pretty(0.0001, zeros=3) == "0.0₃1"  # Compress with zeros=3 (3 zeros)
+
+    # Test compress parameter (round after zero block)
+    assert (
+        pretty(0.00012345, zeros=2, compress=2) == "0.0₃12"
+    )  # Round to 2 digits after zeros
+    assert (
+        pretty(0.00012345, zeros=4, compress=4) == "0.0001234"
+    )  # No compression (3 < 4 zeros), 4 digits after 3 zeros
+    assert pretty(0.00012345, zeros=4, compress=8) == "0.00012345"
+    assert (
+        pretty(0.00012345, zeros=2, compress=3) == "0.0₃123"
+    )  # Round to 3 digits after zeros
+    assert (
+        pretty(-0.0010959999999999997522, compress=3) == "-0.0011"
+    )  # Negative with rounding
+
+    # Test both parameters together
+    assert (
+        pretty("0.0000012345", zeros=4, compress=2) == "0.0₅12"
+    )  # 5 zeros, round to 2 digits
+    assert (
+        pretty("0.00012345", zeros=4, compress=2) == "0.00012"
+    )  # Only 3 zeros, no compression, 2 digits after 3 zeros
+
+    # Test that other pretty parameters still work with compression
+    assert pretty(0.00012, zeros=2, sign=True) == "+0.0₃12"  # With sign
+    assert pretty(12000.00012, zeros=2, symbol="'") == "12'000.0₃12"  # With radix
+    assert (
+        pretty(-0.00012, zeros=2, sign=True, symbol="'") == "-0.0₃12"
+    )  # Negative with sign and radix
+
+    # Test edge cases
+    assert pretty(0, zeros=1) == "0"  # Zero value
+    assert pretty(None, zeros=2) == None  # None value
+    assert (
+        pretty(1.0, zeros=2) == "1"
+    )  # No fractional zeros to compress, trailing zero removed for clean formatting
 
 
 def test_compress_zeros():
     assert compress_zeros(None) == None
     assert compress_zeros(0) == "0"
-    # assert compress_zeros(0.0) == "0.0"
+    assert compress_zeros(0.0) == "0.0"
     assert compress_zeros(1) == "1"
-    # assert compress_zeros(1.0) == "1.0"
-    # assert compress_zeros(1.0, round=0) == "1.0"
+    assert compress_zeros(1.0) == "1.0"
+    assert compress_zeros(1.0, round=0) == "1.0"
     assert compress_zeros(0.00012) == "0.0₃12"
     assert compress_zeros(0.00012, round=2) == "0.0₃12"
     assert compress_zeros(0.0123) == "0.0123"
     assert compress_zeros(0.0123456, round=3) == "0.0123"
     assert compress_zeros(1.000045) == "1.0₄45"
+    assert compress_zeros(0.0010859999999999997522, round=3) == "0.0₂109"
     assert compress_zeros(-0.0010959999999999997522, round=3) == "-0.0₂11"
+    assert compress_zeros("-0.012300") == "-0.0123"
+    assert compress_zeros(0.01, zeros=1) == "0.0₁1"
+    assert compress_zeros(0.001, zeros=1) == "0.0₂1"
+    assert compress_zeros("1.10", zeros=1) == "1.1"
+    assert compress_zeros(0.01, zeros=3) == "0.01"
+    assert compress_zeros(0.001, zeros=3) == "0.001"
+    assert compress_zeros(0.0001, zeros=3) == "0.0₃1"
+    assert compress_zeros(0.00001, zeros=3) == "0.0₄1"
+    assert compress_zeros(0.0000012, zeros=1) == "0.0₅12"
+    assert compress_zeros(0.0000012, zeros=5) == "0.0₅12"
+    assert compress_zeros(0.0000012, zeros=6) == "0.0000012"

@@ -3,6 +3,7 @@
 build/
 dist/
 *.egg-info
+*.bak
 
 ## MacOS
 .DS_Store
