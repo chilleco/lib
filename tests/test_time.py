@@ -15,6 +15,7 @@ from libdev.time import (
     get_month_start,
     get_next_day,
     get_next_month,
+    get_delta_days,
 )
 
 
@@ -128,3 +129,11 @@ def test_get_next_day():
 def test_get_next_month():
     assert get_next_month(1703980800) == 1704067200
     assert get_next_month(1703970000, tz=3) == 1704056400
+
+
+def test_get_delta_days():
+    assert get_delta_days(1756670400, 1759262400) == 30
+    assert isinstance(get_delta_days(1756670400, 1759262400, 0), int)
+    assert isinstance(get_delta_days(1756670400, 1759262401, 1), int)
+    assert isinstance(get_delta_days(1756670400, 1759262401, 0), int)
+    assert isinstance(get_delta_days(1756670400, 1759263511, 2), float)

@@ -380,3 +380,9 @@ def get_next_month(timestamp=None, tz=0):
         )
 
     return int(next_month.timestamp())
+
+
+def get_delta_days(start, end, digits=0):
+    """Get the number of days between two timestamps"""
+    delta = round((end - start) / (24 * 60 * 60), digits)
+    return delta if delta % 1 else int(delta)
