@@ -1,5 +1,10 @@
-"""
-Functionality of getting configuration
+"""Centralized configuration loader for LibDev consumers.
+
+This module mirrors the behavior documented in `LIBDEV_DOCUMENTATION.md`:
+it first ingests a project level ``sets.json`` file, then overlays values
+from ``.env`` (via ``python-dotenv``) by translating dotted keys to
+``UPPER_SNAKE_CASE`` environment variables. Use the helpers below instead of
+calling ``os.getenv`` throughout the codebase so the hierarchy stays uniform.
 """
 
 import os
@@ -19,7 +24,15 @@ if os.path.isfile(".env"):
 
 
 def cfg(name, default=None):
-    """Get config value by key"""
+    """Return a config value stored in ``sets.json``/``.env``.
+
+    The lookup walks dotted paths inside the parsed JSON structure and, when a
+    key is missing, falls back to an environment variable where dots are
+    replaced with underscores and the string is upper-cased (``api.base`` →
+    ``API_BASE``). Environment values are JSON-decoded automatically so booleans
+    and numeric strings turn into native Python types. ``default`` is returned
+    when a key is absent in both sources.
+    """
 
     keys = name.split(".")
     data = sets
@@ -44,7 +57,13 @@ def cfg(name, default=None):
 
 
 def set_cfg(name, value):
-    """Set config value"""
+    """Mutate the in-memory ``sets`` dictionary for tests or overrides.
+
+    Writes scoped dotted keys back into the ``sets`` mapping without touching
+    disk. This mirrors the behavior in consumer repos that temporarily adjust
+    configuration for integration tests or AI agents. Changes live only for the
+    current process and should be reset between tests.
+    """
 
     array_name = name.split(".")
     dictionary = {}

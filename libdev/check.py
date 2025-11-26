@@ -239,4 +239,5 @@ def get_url(data: str) -> str | None:
 
 
 def clear_text(data, extra=".,"):
+    """Strip all characters except alphanumerics, space, and ``extra`` chars."""
     return re.sub(rf"[^\w {extra}]", "", data).strip()

@@ -1,5 +1,8 @@
-"""
-Time functionality
+"""Datetime parsing/formatting helpers aligned with LibDev localization rules.
+
+The functions below implement the Russian month parsing, timezone handling, and
+delta formatting conventions cited in ``LIBDEV_DOCUMENTATION.md`` so every
+project surfaces dates the same way.
 """
 
 # TODO: Учитывать летнее / зимнее время в прошлых датах, которого теперь нет

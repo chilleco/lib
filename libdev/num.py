@@ -1,5 +1,8 @@
-"""
-Numbers functionality
+"""Numeric normalization and presentation helpers used across LibDev.
+
+Implements the opinionated formatting rules discussed in the integration
+guide: deterministic rounding, removal of floating-point artifacts, thousands
+separators, and zero-compression for compact analytical displays.
 """
 
 import re
@@ -22,7 +25,7 @@ def is_float(value: str) -> bool:
 
 
 def to_num(value) -> bool:
-    """Convert value to int or float"""
+    """Convert an incoming scalar to ``int``/``float`` while preserving intent."""
 
     if value is None:
         return None
@@ -80,7 +83,11 @@ def get_whole(value):
 
 
 def simplify_value(value, decimals=4):
-    """Get the significant part of a number"""
+    """Return the significant digits of ``value`` capped by ``decimals``.
+
+    Used by analytics pipelines to produce short strings that still encode the
+    important portion of very large or tiny numbers.
+    """
 
     if value is None:
         return None
@@ -126,7 +133,13 @@ def pretty(
     zeros=4,
     compress=None,
 ):
-    """Decorate the number beautifully"""
+    """Format ``value`` according to LibDev UI/metrics rules.
+
+    Supports optional rounding to a target precision, manual sign prefixing,
+    swapping the thousands separator symbol, and compressing leading/trailing
+    zeros (see ``compress_zeros``). This helper is the canonical way to build
+    user-facing number strings.
+    """
 
     if value is None:
         return None
@@ -282,6 +295,8 @@ def to_step(value, step=1, side=False):
 
 
 def to_plain(value) -> str:
+    """Convert ``value`` to a normalized decimal string without notation."""
+
     if value is None:
         return None
     try:
@@ -311,11 +326,17 @@ def _round_to_decimals(x, decimals):
 
 
 def compress_zeros(x, zeros=2, round=None) -> str:
-    """
-    0.000012 -> '0.0₄12'
-    1.000045 -> '1.0₄45'
-    round: number of digits after the zero block (rounds).
-    zeros: minimum count of consecutive zeros to compress (default: 2).
+    """Compress zero runs using the subscript notation referenced in the docs.
+
+    Examples::
+
+        0.000012 -> "0.0₄12"
+        1.000045 -> "1.0₄45"
+
+    ``round`` controls how many digits remain after the compressed block, while
+    ``zeros`` sets the minimum run length required before a compression occurs.
+    Returns a string that can be passed to ``pretty`` or directly displayed in
+    dashboards.
     """
 
     if x is None:
