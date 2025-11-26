@@ -157,6 +157,7 @@ def test_pretty():
     assert pretty(123.456, 1) == "123"
     assert pretty(123.456, 1, True) == "+123"
     assert pretty(12345.6, 3, True) == "+12’346"
+    assert pretty(1046012.4859999998, 0) == "1’046’012"
     assert pretty(-0.000000235235, zeros=None, compress=None) == "-0.000000235235"
     assert pretty(-0.000000235235, zeros=4, compress=2) == "-0.0₆24"
 

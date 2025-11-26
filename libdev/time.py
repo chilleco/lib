@@ -54,13 +54,15 @@ def to_tz(hours):
     return datetime.timezone(datetime.timedelta(hours=hours))
 
 
-def get_time(data=None, template="%d.%m.%Y %H:%M:%S", tz=0):
+def get_time(data=None, template="%d.%m.%Y %H:%M:%S", tz=None):
     """Get time from timestamp"""
 
     if data is None:
         data = time.time()
     if isinstance(data, str):
         return data
+    if tz is None:
+        tz = 0
 
     # TODO: smart TZ
 
@@ -70,18 +72,20 @@ def get_time(data=None, template="%d.%m.%Y %H:%M:%S", tz=0):
     return time.strftime(template, time.gmtime(data + tz * 3600))
 
 
-def get_date(data=None, template="%d.%m.%Y", tz=0):
+def get_date(data=None, template="%d.%m.%Y", tz=None):
     """Get date from timestamp"""
     return get_time(data, template, tz)
 
 
-def decode_time(data=None, template="%d.%m.%Y %H:%M:%S", tz=0):
+def decode_time(data=None, template="%d.%m.%Y %H:%M:%S", tz=None):
     """Get timestamp from time"""
 
     if not data:
         return None
     if isinstance(data, int):
         return data
+    if tz is None:
+        tz = 0
 
     try:
         data = datetime.datetime.strptime(data, template)
@@ -93,16 +97,19 @@ def decode_time(data=None, template="%d.%m.%Y %H:%M:%S", tz=0):
     return int(data.timestamp())
 
 
-def decode_date(data=None, template="%d.%m.%Y", tz=0):
+def decode_date(data=None, template="%d.%m.%Y", tz=None):
     """Get timestamp from date"""
     return decode_time(data, template, tz)
 
 
 # pylint: disable=too-many-branches,too-many-statements
-def parse_time(data: str, tz=0):
+def parse_time(data: str, tz=None):
     """Parse time"""
 
     # TODO: 16 year -> 2016 year
+
+    if tz is None:
+        tz = 0
 
     data = data.lower()
 
@@ -267,7 +274,7 @@ def format_delta(sec, short=False, locale="en"):
     return delta
 
 
-def get_midnight(timestamp=None, tz=0):
+def get_midnight(timestamp=None, tz=None):
     """
     Get the start of the day (midnight) for a given timestamp in a specified timezone.
 
@@ -278,14 +285,19 @@ def get_midnight(timestamp=None, tz=0):
     Returns:
         float: The timestamp for the start of the day (midnight) in the specified timezone.
     """
+
     if timestamp is None:
         timestamp = time.time()
+    if tz is None:
+        tz = 0
+
     dt_local = datetime.datetime.fromtimestamp(timestamp, tz=to_tz(tz))
     start_day = dt_local.replace(hour=0, minute=0, second=0, microsecond=0)
+
     return int(start_day.timestamp())
 
 
-def get_month_start(timestamp=None, tz=0):
+def get_month_start(timestamp=None, tz=None):
     """
     Get the start of the month (midnight on the first day of the month) for a given timestamp in a specified timezone.
 
@@ -296,14 +308,25 @@ def get_month_start(timestamp=None, tz=0):
     Returns:
         float: The timestamp for the start of the month in the specified timezone.
     """
+
     if timestamp is None:
         timestamp = time.time()
+    if tz is None:
+        tz = 0
+
     dt_local = datetime.datetime.fromtimestamp(timestamp, tz=to_tz(tz))
     start_month = dt_local.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
+
     return int(start_month.timestamp())
 
 
-def get_week_start(timestamp=None, tz=0):
+def get_previous_month(timestamp=None, tz=None):
+    current_period = get_month_start(timestamp, tz)
+    one_month_ago = get_month_start(current_period - 1, tz)
+    return one_month_ago
+
+
+def get_week_start(timestamp=None, tz=None):
     """
     Get the start of the week (midnight on Monday) for a given timestamp in a specified timezone.
 
@@ -314,17 +337,23 @@ def get_week_start(timestamp=None, tz=0):
     Returns:
         float: The timestamp for the start of the week (Monday at midnight) in the specified timezone.
     """
+
     if timestamp is None:
         timestamp = time.time()
+    if tz is None:
+        tz = 0
+
     dt_local = datetime.datetime.fromtimestamp(timestamp, tz=to_tz(tz))
     # Calculate days to subtract to get to Monday (weekday() returns 0 for Monday, 6 for Sunday)
     days_since_monday = dt_local.weekday()
+
     start_week = dt_local - datetime.timedelta(days=days_since_monday)
     start_week = start_week.replace(hour=0, minute=0, second=0, microsecond=0)
+
     return int(start_week.timestamp())
 
 
-def get_next_day(timestamp=None, tz=0):
+def get_next_day(timestamp=None, tz=None):
     """
     Get the start of the next day (midnight) for a given timestamp in a specified timezone.
 
@@ -335,17 +364,22 @@ def get_next_day(timestamp=None, tz=0):
     Returns:
         float: The timestamp for the start of the next day (midnight) in the specified timezone.
     """
+
     if timestamp is None:
         timestamp = time.time()
+    if tz is None:
+        tz = 0
+
     dt_local = datetime.datetime.fromtimestamp(timestamp, tz=to_tz(tz))
     next_day = (dt_local + datetime.timedelta(days=1)).replace(
         hour=0, minute=0, second=0, microsecond=0
     )
+
     return int(next_day.timestamp())
 
 
 # TODO: get previous month (params=-1 +1)
-def get_next_month(timestamp=None, tz=0):
+def get_next_month(timestamp=None, tz=None):
     """
     Get the start of the next month (midnight on the first day of the next month) for a given timestamp in a specified timezone.
 
@@ -359,6 +393,8 @@ def get_next_month(timestamp=None, tz=0):
 
     if timestamp is None:
         timestamp = time.time()
+    if tz is None:
+        tz = 0
 
     dt_local = datetime.datetime.fromtimestamp(timestamp, tz=to_tz(tz))
 

@@ -13,6 +13,7 @@ from libdev.time import (
     format_delta,
     get_midnight,
     get_month_start,
+    get_previous_month,
     get_next_day,
     get_next_month,
     get_delta_days,
@@ -119,6 +120,12 @@ def test_get_midnight():
 def test_get_month_start():
     assert get_month_start(1704060061.049283) == 1701388800
     assert get_month_start(1704060061, tz=3) == 1704056400
+
+
+def test_get_previous_month():
+    assert get_previous_month() == 1759276800
+    assert get_previous_month(tz=3) == 1759266000
+    assert get_previous_month(1760648400, 1) == 1756681200
 
 
 def test_get_next_day():
