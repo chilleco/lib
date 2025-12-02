@@ -4,31 +4,31 @@ Setup the Python package
 
 import pathlib
 import re
-from setuptools import setup, find_packages
 
+from setuptools import find_packages, setup
 
-with open("README.md", "r", encoding="utf-8") as file:
-    long_description = file.read()
 
 WORK_DIR = pathlib.Path(__file__).parent
 
+with open(WORK_DIR / "README.md", "r", encoding="utf-8") as file:
+    LONG_DESCRIPTION = file.read()
+
 
 def get_version():
-    """Get version"""
+    """Extract version from package init."""
 
     txt = (WORK_DIR / "libdev" / "__init__.py").read_text("utf-8")
-
-    try:
-        return re.findall(r"^__version__ = \"([^\"]+)\"\r?$", txt, re.M)[0]
-    except IndexError as e:
-        raise RuntimeError("Unable to determine version") from e
+    match = re.search(r'^__version__ = "([^"]+)"', txt, re.M)
+    if not match:
+        raise RuntimeError("Unable to determine version")
+    return match.group(1)
 
 
 setup(
     name="libdev",
     version=get_version(),
     description="Set of standard functions for development",
-    long_description=long_description,
+    long_description=LONG_DESCRIPTION,
     long_description_content_type="text/markdown",
     url="https://github.com/chilleco/lib",
     author="Alex Poloz",
@@ -40,6 +40,11 @@ setup(
         "Topic :: Software Development :: Libraries :: Application Frameworks",
         "License :: OSI Approved :: MIT License",
         "Programming Language :: Python :: 3",
+        "Programming Language :: Python :: 3 :: Only",
+        "Programming Language :: Python :: 3.10",
+        "Programming Language :: Python :: 3.11",
+        "Programming Language :: Python :: 3.12",
+        "Programming Language :: Python :: 3.13",
         "Operating System :: OS Independent",
     ],
     keywords=(
@@ -48,14 +53,13 @@ setup(
         "natural language, aws, s3, upload file, file server"
     ),
     packages=find_packages(exclude=("tests",)),
-    python_requires=">=3.7, <4",
+    python_requires=">=3.10, <4",
     install_requires=[
-        # NOTE: Without lib versions because of conflicts with main repo
-        "aiohttp",
-        "python-dotenv",
-        "boto3",
-        "Pillow",
-        "loguru",
+        "aiohttp>=3.13.2",
+        "python-dotenv>=1.2.1",
+        "boto3>=1.42.0",
+        "Pillow>=12.0.0",
+        "loguru>=0.7.3",
     ],
     project_urls={
         "Source": "https://github.com/chilleco/lib",

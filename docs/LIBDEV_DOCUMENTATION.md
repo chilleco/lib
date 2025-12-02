@@ -1,18 +1,19 @@
 # LibDev Integration Guide
 
-This document is meant to be copied into consuming projects (`docs/` or similar) so that automated AI code writers and human contributors understand how to interact with the `libdev` package (version 0.95). It expands on the minimal README, explains what makes LibDev different from generic helper libraries, and records the rules the rest of the chill codebase expects consumers to follow.
+This document is meant to be copied into consuming projects (`docs/` or similar) so that automated AI code writers and human contributors understand how to interact with the `libdev` package (version 0.96). It expands on the minimal README, explains what makes LibDev different from generic helper libraries, and records the rules the rest of the chill codebase expects consumers to follow.
 
 ## Purpose & Scope
 - `libdev` is the canonical toolbox for DevOps and backend projects in this organization. It replaces ad-hoc helpers with a curated set of functions covering configuration, logging, network access, numeric/time formatting, validation, localization, file processing (S3 + images), and crypto.
 - Every repository that depends on LibDev should treat it as the single source of truth for these concerns. When extending a project, first look for an existing LibDev helper instead of reimplementing functionality.
-- The package is Python 3.7+ (<4) and ships under the MIT License. Core dependencies: `aiohttp`, `python-dotenv`, `boto3`, `Pillow`, and `loguru`.
+- The package targets Python 3.10+ (<4) and ships under the MIT License. Core dependencies: `aiohttp`, `python-dotenv`, `boto3`, `Pillow`, and `loguru`.
 
 ## Installation & Versioning
 ```bash
 pip install libdev  # Latest from PyPI https://pypi.org/project/libdev/
 ```
-- Pin the version in each consumer so breaking changes are controlled. The current repo ships `__version__ = "0.95"`.
-- When developing the library itself, use `make setup` (runtime), `make setup-tests` (tests), or `make setup-all`. Run `make test` before releasing; `make release` builds + uploads wheels.
+- Pin the version in each consumer so breaking changes are controlled. The current repo ships `__version__ = "0.96"`.
+- Local dev installs use PEP 621 metadata in `pyproject.toml` (no `requirements*.txt`). Install runtime deps with `pip install .`; install tooling/tests with `pip install .[dev]` or `make setup-dev`.
+- Run `make test` before releasing; `make release` builds and uploads wheels via `python -m build` + `twine`.
 
 ## Principles & Differences vs Other Helper Kits
 1. **Configuration-first**: A JSON file (`sets.json`) in the project root plus `.env` variables are the authoritative configuration sources. Nested keys are read via dot-notation and mirrored to upper-case underscore env vars. Values are JSON-deserialized automatically.

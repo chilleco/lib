@@ -4,6 +4,13 @@ Development library — Set of standard functions for development
 [GitHub](https://github.com/chilleco/lib)
  | [PyPI](https://pypi.org/project/libdev/)
 
+## Requirements
+- Python 3.10+ (dependencies are 3.14-ready)
+
+## Installation
+- Runtime: `pip install .`
+- Dev / tests: `pip install .[dev]` or `make setup-dev`
+
 ## Submodules
 Stream | Submodule | Description
 ---|---|---

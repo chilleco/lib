@@ -123,8 +123,8 @@ def test_get_month_start():
 
 
 def test_get_previous_month():
-    assert get_previous_month() == 1759276800
-    assert get_previous_month(tz=3) == 1759266000
+    assert get_previous_month(1764497920.160952) == 1759276800
+    assert get_previous_month(1764497920, tz=3) == 1759266000
     assert get_previous_month(1760648400, 1) == 1756681200
 
 
