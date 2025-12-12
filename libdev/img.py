@@ -35,7 +35,11 @@ def fix_rotation(image):
             break
 
     # pylint: disable=protected-access
-    exif = image._getexif()
+    get_exif = getattr(image, "_getexif", None)
+    if not callable(get_exif):
+        return image
+
+    exif = get_exif()
     if exif and orientation in exif:
         exif = dict(exif.items())
         if exif[orientation] == 3:
