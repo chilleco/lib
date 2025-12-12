@@ -59,6 +59,7 @@ setup(
         "python-dotenv>=1.2.1",
         "boto3>=1.42.0",
         "Pillow>=12.0.0",
+        "pillow-heif>=1.0.0",
         "loguru>=0.7.3",
     ],
     project_urls={

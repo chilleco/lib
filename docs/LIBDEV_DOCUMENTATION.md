@@ -130,7 +130,7 @@ log.json({"event": "http_request", "status": 200, "path": "/api"})
 
 **`libdev.img`**
 - `fix_rotation(image)` inspects EXIF metadata and normalizes orientation.
-- `await convert(image, image_type="webp")` accepts URLs, base64 strings, bytes, or file objects. It fetches/decodes content, converts to RGB, applies rotation fix, and saves to the requested format. Returns raw bytes ready for `libdev.s3.upload` or HTTP responses.
+- `await convert(image, image_type="webp")` accepts URLs, base64 strings, bytes, or file objects. It fetches/decodes content, converts to RGB, applies rotation fix, and saves to the requested format (including HEIC/HEIF via `pillow-heif>=1.0.0`). Returns raw bytes ready for `libdev.s3.upload` or HTTP responses.
 
 ## Example Workflow
 ```python
