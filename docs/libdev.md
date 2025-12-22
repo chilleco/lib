@@ -92,7 +92,7 @@ log.json({"event": "http_request", "status": 200, "path": "/api"})
 **`libdev.codes`**
 - Provides static tuples of ISO-639-1 locale codes, emoji flags, supported login networks, and user status levels.
 - `get_locale(code)` returns the index in `LOCALES`. Accepts a string code (`"ru"`) or integer index. Defaults to the locale configured via `cfg("locale", "en")`.
-- `get_network(code)` maps channel identifiers (`"tg"`, `"vk"`, `"web"`) to array indexes used in databases.
+- `get_network(code)` maps channel identifiers (`"tg"`, `"vk"`, `"web"`, ...) to array indexes used in databases.
 - `get_flag(code)` converts a locale code/index to the matching emoji in `FLAGS`.
 
 **`libdev.check`**

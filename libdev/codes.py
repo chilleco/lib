@@ -302,13 +302,14 @@ FLAGS = (
 NETWORKS = (
     "",  # Console
     "web",  # Web-interface
-    "tg",  # Telegram
-    "vk",  # VKontakte
+    "tg",  # Telegram (https://core.telegram.org/bots/webapps)
+    "vk",  # VKontakte (https://dev.vk.com/ru/mini-apps/overview)
     "g",  # Google
     "fb",  # Facebook
     "a",  # Apple
     "in",  # LinkedIn
     "ig",  # Instagram
+    "max",  # MAX (https://dev.max.ru/docs/webapps/introduction)
 )
 
 STATUSES = (
