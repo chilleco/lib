@@ -31,12 +31,12 @@ pip install libdev  # Latest from PyPI https://pypi.org/project/libdev/
 - Use `set_cfg("path.to.key", value)` to mutate the in-memory `sets` dictionary (e.g., overriding values in tests). Changes are not persisted back to disk.
 - Common keys:
   - `project_name`: default S3 bucket name.
-  - `mode`: used when building directory prefixes in S3 helpers (e.g., `test/uploads`).
+  - `env`: used when building directory prefixes in S3 helpers (e.g., `test/uploads`).
   - `s3.host`, `s3.user`, `s3.pass`, `s3.region`.
 - Example `sets.json` skeleton (do **not** check secrets into VCS):
 ```json
 {
-  "mode": "production",
+  "env": "PROD",
   "project_name": "my-bucket",
   "s3": {
     "host": "https://s3.example.com/",
@@ -120,7 +120,7 @@ log.json({"event": "http_request", "status": 200, "path": "/api"})
 ### File & Asset Layer
 **`libdev.s3`**
 - Global `s3` client initialized with `cfg("s3.*")`. If credentials are absent, helpers no-op and return `None`/`[]`.
-- `await upload(file, directory=cfg("mode"), bucket=cfg("project_name"), file_type=None)`:
+- `await upload(file, directory=cfg("env"), bucket=cfg("project_name"), file_type=None)`:
   - `file` may be a local path, remote URL, bytes, or a file-like object.
   - Remote URLs are fetched via `aiohttp`, mime types inferred from headers/extension.
   - Returns a full URL `f"{cfg('s3.host')}{bucket}/{key}"` or `None` on errors.

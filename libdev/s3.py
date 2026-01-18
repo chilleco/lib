@@ -50,7 +50,7 @@ async def fetch_file(url):
 
 async def upload(
     file,
-    directory=cfg("mode").lower(),
+    directory=(cfg("env") or cfg("mode") or "TEST").lower(),
     bucket=cfg("project_name"),
     file_type=None,
 ):
@@ -99,7 +99,7 @@ async def upload(
 
 
 def get(
-    directory=cfg("mode").lower(),
+    directory=(cfg("env") or cfg("mode") or "test").lower(),
     bucket=cfg("project_name"),
 ):
     """List all files in a specified directory (prefix) in S3"""
