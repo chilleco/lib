@@ -1,6 +1,6 @@
 # LibDev Integration Guide
 
-This document is meant to be copied into consuming projects (`docs/` or similar) so that automated AI code writers and human contributors understand how to interact with the `libdev` package (version 0.96). It expands on the minimal README, explains what makes LibDev different from generic helper libraries, and records the rules the rest of the chill codebase expects consumers to follow.
+This document is meant to be copied into consuming projects (`docs/` or similar) so that automated AI code writers and human contributors understand how to interact with the `libdev` package. It expands on the minimal README, explains what makes LibDev different from generic helper libraries, and records the rules the rest of the chill codebase expects consumers to follow.
 
 ## Purpose & Scope
 - `libdev` is the canonical toolbox for DevOps and backend projects in this organization. It replaces ad-hoc helpers with a curated set of functions covering configuration, logging, network access, numeric/time formatting, validation, localization, file processing (S3 + images), and crypto.
@@ -11,14 +11,14 @@ This document is meant to be copied into consuming projects (`docs/` or similar)
 ```bash
 pip install libdev  # Latest from PyPI https://pypi.org/project/libdev/
 ```
-- Pin the version in each consumer so breaking changes are controlled. The current repo ships `__version__ = "0.96"`.
+- Pin the version in each consumer so breaking changes are controlled.
 - Local dev installs use PEP 621 metadata in `pyproject.toml` (no `requirements*.txt`). Install runtime deps with `pip install .`; install tooling/tests with `pip install .[dev]` or `make setup-dev`.
 - Run `make test` before releasing; `make release` builds and uploads wheels via `python -m build` + `twine`.
 
 ## Principles & Differences vs Other Helper Kits
 1. **Configuration-first**: A JSON file (`sets.json`) in the project root plus `.env` variables are the authoritative configuration sources. Nested keys are read via dot-notation and mirrored to upper-case underscore env vars. Values are JSON-deserialized automatically.
 2. **Async boundary is explicit**: Anything that touches the network (`libdev.req`, `libdev.s3`, `libdev.img.convert` when fetching URLs) is declared `async`. Callers must stay inside an event loop and `await` these helpers instead of mixing synchronous libraries.
-3. **Structured logging**: The bundled `loguru` logger is wrapped so every module logs through `libdev.log.log`. JSON logging is built-in via `log.json(payload)` to keep machine-readable traces consistent.
+3. **Structured logging + alert routing**: `libdev.log.setup_logging()` configures JSON stdout logs with unified fields (`project`, `service`, `env`, `version`, `trace_id`, `request_id`) and optionally routes selected records to Telegram alerts through `libdev.notify`.
 4. **Opinionated formatting**: `libdev.num`, `libdev.time`, and `libdev.lang` encode company-specific numeric, temporal, and localization rules (e.g., Russian month names, zero-compression notation, thousands separators). Projects must use them to guarantee UI/API consistency.
 5. **Strict validation helpers**: `libdev.check` and `libdev.dev` codify how to sanitize contact data, URLs, and IPs. These are stricter than typical regexes (e.g., `fake_mail`, `fake_phone`, `check_public_ip`) to protect analytics and anti-fraud systems.
 6. **AWS/S3 abstraction**: Credentials are loaded from config at import time and reused, so consumers rarely touch `boto3` directly. Upload helpers understand bytes, file paths, remote URLs, or already opened file objects.
@@ -33,6 +33,9 @@ pip install libdev  # Latest from PyPI https://pypi.org/project/libdev/
   - `project_name`: default S3 bucket name.
   - `env`: used when building directory prefixes in S3 helpers (e.g., `test/uploads`).
   - `s3.host`, `s3.user`, `s3.pass`, `s3.region`.
+  - `log.level`: default level used by `setup_logging(...)` sinks.
+  - `log.notify_timeout`: timeout (seconds) for Telegram notifications (`3.0` by default).
+  - Optional app-level keys to pass into `setup_logging(...)`: `log.notify_token`, `log.notify_chat`.
 - Example `sets.json` skeleton (do **not** check secrets into VCS):
 ```json
 {
@@ -52,13 +55,44 @@ Below is a curated list of the modules shipped inside `libdev`. Follow the call 
 
 ### System Layer
 **`libdev.log`**
-- Exposes `log` (a `loguru` logger) plus `Logger.json(data)` for structured records. It auto-adds `sys.stderr` as a sink and removes sinks on exit, so do not call `log.remove()` yourself.
+- Main entry points: `setup_logging(...)`, `log`, `set_request_context(...)`, `clear_request_context()`, and `add_external_sink(...)`.
+- `setup_logging(...)` rebuilds loguru sinks so each record goes to JSON stdout and, when requested, to notification transport.
+- All logger methods (`info`, `warning`, `error`, `exception`, etc.) accept `tags=`, `extra=`, and `silent=`:
+  - `extra` becomes structured payload in the JSON line.
+  - `tags` are normalized to an array.
+  - `silent=False` enables Telegram alerting for that record.
+- Convenience methods:
+  - `log.important(...)` defaults to `silent=False` (`IMPORTANT` notify type).
+  - `log.request(...)` emits `REQUEST` notify type.
+  - `log.exception(...)` captures the active traceback and can notify when `silent=False`.
 - Example:
 ```python
-from libdev.log import log
-log.info("Service booting")
-log.json({"event": "http_request", "status": 200, "path": "/api"})
+from libdev.cfg import cfg
+from libdev.log import clear_request_context, log, set_request_context, setup_logging
+
+setup_logging(
+    project=cfg("PROJECT_NAME") or cfg("name"),
+    service=cfg("service", "app"),
+    env=cfg("env", "test"),
+    version=cfg("release", "unknown"),
+    level=cfg("log.level", "INFO"),
+    notify_token=cfg("log.notify_token"),
+    notify_chat=cfg("log.notify_chat"),
+)
+
+set_request_context("req-42", "trace-42")
+log.info("Service booting", extra={"worker": "sync"})
+log.important("Deploy completed", tags=["release"], extra={"version": cfg("release")})
+clear_request_context()
 ```
+
+**`libdev.notify`**
+- Telegram transport used by `libdev.log` for alert delivery.
+- Public helpers:
+  - `setup_notify(token, chat)` stores transport credentials in module state.
+  - `notify_log_record(...)` formats and sends one log record.
+- Messages are escaped for Telegram MarkdownV2, include tags/request IDs/trace IDs when present, and are truncated to stay within Telegram message limits.
+- Delivery timeout is controlled by `cfg("log.notify_timeout")`.
 
 **`libdev.req`**
 - `await fetch(url, payload=None, files=None, type_req="post", type_data="json", headers=None, timeout=None)`
@@ -135,24 +169,30 @@ log.json({"event": "http_request", "status": 200, "path": "/api"})
 ## Example Workflow
 ```python
 from libdev.cfg import cfg
-from libdev.log import log
+from libdev.log import log, setup_logging
 from libdev.req import fetch
 from libdev.s3 import upload
 from libdev.img import convert
 
 API_URL = cfg("api.base")
+setup_logging(level=cfg("log.level", "INFO"))
 
 async def sync_avatar(user_id, image_url):
     status, data = await fetch(f"{API_URL}/users/{user_id}")
     if status >= 400:
-        log.json({"event": "user_fetch_failed", "user_id": user_id, "status": status, "body": data})
+        log.error(
+            "user_fetch_failed",
+            extra={"user_id": user_id, "status": status, "body": data},
+            tags=["avatars"],
+            silent=False,
+        )
         return
 
     converted = await convert(image_url, image_type="png")
     s3_url = await upload(converted, directory="avatars", file_type="png")
-    log.json({"event": "avatar_uploaded", "user_id": user_id, "url": s3_url})
+    log.info("avatar_uploaded", extra={"user_id": user_id, "url": s3_url}, tags=["avatars"])
 ```
-- Note the consistent use of `cfg`, `fetch`, `convert`, `upload`, and `log.json`. This is the preferred pattern for any feature involving config, HTTP, binary assets, and logging.
+- Note the consistent use of `cfg`, `setup_logging`, `fetch`, `convert`, `upload`, and structured `log.*(..., extra=...)` calls. This is the preferred pattern for any feature involving config, HTTP, binary assets, and logging.
 
 ## Testing & Quality Expectations
 - Run `make test` inside the LibDev repo before publishing: this executes linting (`pylint` with rules in `tests/.pylintrc`) plus the full `pytest` suite under `tests/`.
@@ -169,7 +209,9 @@ Open an issue or pull request in https://github.com/chilleco/lib with the desire
 ## Quick Checklist for AI/Automation Agents
 - [ ] Read config exclusively via `cfg()`/`set_cfg()`.
 - [ ] Reuse `libdev.req.fetch` for HTTP; keep functions async.
-- [ ] Route all logs through `libdev.log.log` (prefer `log.json`).
+- [ ] Initialize logging once via `setup_logging(...)`, then route all records through `libdev.log.log`.
+- [ ] Use `silent=False` (or `log.important`) only for events that should trigger Telegram alerts.
+- [ ] Set and clear request context (`set_request_context` / `clear_request_context`) in request-scoped code.
 - [ ] Use `libdev.num`, `libdev.time`, and `libdev.lang` for formatting text shown to users.
 - [ ] Use `libdev.check` before trusting phone/email/url input.
 - [ ] Prefer `libdev.s3.upload` + `libdev.img.convert` for handling user files.

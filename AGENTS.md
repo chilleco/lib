@@ -1,9 +1,9 @@
 # Repository Guidelines
 
 ## Project Structure & Module Organization
-- Core library lives in `libdev/` (async HTTP helpers, config, logging, S3, image tools, formatting utilities).
+- Core library lives in `libdev/` (async HTTP helpers, config, structured logging, Telegram notify transport, S3, image tools, formatting utilities).
 - Tests sit in `tests/` (`test_*.py`), sharing fixtures/config in the same folder.
-- Docs are in `docs/` (`LIBDEV_DOCUMENTATION.md`), build assets under `build/` and `dist/` after packaging.
+- Docs are in `docs/` (`libdev.md`), build assets under `build/` and `dist/` after packaging.
 - Packaging metadata: `pyproject.toml`; legacy `setup.py` is a shim for `setuptools`.
 - Local config/example values live in `sets.json`; never commit real secrets here.
 
@@ -32,3 +32,4 @@
 ## Security & Configuration Tips
 - Do not commit real credentials in `sets.json` or `.env`; use placeholders in examples.
 - S3 helpers initialize at import—tests should mock or supply dummy endpoints/keys to avoid real uploads.
+- Treat logging notify credentials (`log.notify_token`, `log.notify_chat`) as secrets; only load from secure env/config.
